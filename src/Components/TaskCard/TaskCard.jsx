@@ -36,6 +36,12 @@ export default function TaskCard({
   }
 
   async function handleEditSubmit() {
+    if (!(taskData.title.length >= 2 && taskData.title.length <= 64)) {
+      alert(
+        "Название задачи должно содержать минимум 2 символа, максимум 64 символов"
+      );
+      return;
+    }
     setIsEdit((isEdit) => !isEdit);
     try {
       await editTask(taskData.id, taskData.isDone, taskData.title);
@@ -47,18 +53,18 @@ export default function TaskCard({
   }
 
   return (
-    <div className="task-card">
+    <div className={`task-card ${isDone && "completed"}`}>
       <article className="left-side">
         <CheckBox
           task={taskData}
           fetchTasks={fetchTasks}
           fetchCountTasks={fetchCountTasks}
         />
-        {!isEdit && <p>{taskData.title}</p>}
+        {!isEdit && <p>{title}</p>}
         {isEdit && (
           <textarea
             rows={5}
-            defaultValue={taskData.title}
+            defaultValue={title}
             onChange={(event) => handleChange(event.target.value)}
           ></textarea>
         )}

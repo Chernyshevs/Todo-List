@@ -8,7 +8,7 @@ import { taskCounterByStatus } from "../../api/https";
 import { viewTasks } from "../../api/https.js";
 
 export default function TodoList() {
-  const [selectedTasks, setSelectedTasks] = useState("All");
+  const [selectedTasks, setSelectedTasks] = useState("all");
 
   const [shownTasks, setShownTasks] = useState([]);
   const [isFetchingTasks, setIsFetchingTasks] = useState(false);
