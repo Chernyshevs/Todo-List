@@ -6,7 +6,7 @@ export async function viewTasks(tasksStatus) {
     }
   );
   if (!response.ok) {
-    throw new Error("Не удалось получить задачи.");
+    throw new Error("Произошла ошибка, попробуйте обновить страницу");
   }
   const resData = await response.json();
   return resData.data;
@@ -17,7 +17,7 @@ export async function taskCounterByStatus() {
     method: "GET",
   });
   if (!response.ok) {
-    throw new Error("Не удалось получить задачи.");
+    throw new Error("Произошла ошибка, попробуйте обновить страницу");
   }
   const resData = await response.json();
   return resData.info;
@@ -35,7 +35,7 @@ export async function editTask(id, status, title) {
     }),
   });
   if (!response.ok) {
-    throw new Error("Не удалось обновить задачу.");
+    throw new Error("Произошла ошибка, попробуйте обновить страницу.");
   }
 }
 
@@ -44,7 +44,7 @@ export async function deleteTask(id) {
     method: "DELETE",
   });
   if (!response.ok) {
-    throw new Error("Не удалось удалить задачу.");
+    throw new Error("Произошла ошибка, попробуйте обновить страницу.");
   }
 }
 
@@ -60,6 +60,6 @@ export async function addTask(title, status=false) {
     }),
   });
   if (!response.ok) {
-    throw new Error("Не удалось добавить задачу.");
+    throw new Error("Произошла ошибка, попробуйте обновить страницу");
   }
 }
