@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-import AddTask from "../AddTask/AddTask";
-import TaskContainer from "../TaskContainer/TaskContainer";
-import TaskStatuses from "../TaskStatuses/TaskStatuses";
+import AddTask from "../AddTask/AddTask.jsx";
+import TaskContainer from "../TaskContainer/TaskContainer.jsx";
+import TaskStatuses from "../TaskStatuses/TaskStatuses.jsx";
 
-import { taskCounterByStatus } from "../../api/https";
+import { taskCounterByStatus } from "../../api/https.js";
 import { viewTasks } from "../../api/https.js";
 
-export default function TodoList() {
+export default function TodoListPage() {
   const [selectedTasks, setSelectedTasks] = useState("all");
 
   const [shownTasks, setShownTasks] = useState([]);
