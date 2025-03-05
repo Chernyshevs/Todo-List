@@ -2,18 +2,16 @@ import "./TaskCard.css";
 
 import { useState } from "react";
 
-import { editTask } from "../../api/https";
+import { editTask, deleteTask } from "../../api/https";
 
-import CheckBox from "../CheckBox";
-import EditTask from "../EditTask";
-import DeleteTask from "../DeleteTask";
+import TodoStatusSwitching from "../TodoStatusSwitching";
+// import EditTask from "../EditTask";
+import CancelButton from "../CancelButton";
+import SubmitButton from "../SubmitButton";
+import EditButton from "../EditButton";
+import DeleteTaskButton from "../DeleteTaskButton";
 
-export default function TaskCard({
-  id,
-  title,
-  isDone,
-  fetchTasks,
-}) {
+export default function TaskCard({ id, title, isDone, fetchTasks }) {
   const [taskData, setTaskData] = useState({
     id: id,
     title: title,
@@ -34,7 +32,8 @@ export default function TaskCard({
     });
   }
 
-  async function handleEditSubmit() {
+  async function handleEditSubmit(event) {
+    event.preventDefault();
     if (!(taskData.title.length >= 2 && taskData.title.length <= 64)) {
       alert(
         "Название задачи должно содержать минимум 2 символа, максимум 64 символов"
@@ -50,36 +49,50 @@ export default function TaskCard({
     }
   }
 
+  async function handleClickDelele() {
+    try {
+      await deleteTask(id);
+      await fetchTasks();
+    } catch (error) {
+      alert(`Ошибка: ${error.message || "Не удалось удалить задачу"}`);
+    }
+  }
   return (
     <div className={`task-card ${isDone && "completed"}`}>
       <article className="left-side">
-        <CheckBox
-          task={taskData}
-          fetchTasks={fetchTasks}
+        <input
+          type="checkbox"
+          value={isDone}
+          style={{
+            visibility: "hidden",
+            position: "absolute",
+          }}
         />
+        <TodoStatusSwitching task={taskData} fetchTasks={fetchTasks} />
         {!isEdit && <p>{title}</p>}
         {isEdit && (
-          <textarea
-            rows={5}
-            defaultValue={title}
-            onChange={(event) => handleChange(event.target.value)}
-          ></textarea>
+          <form id={id} onSubmit={(event) => handleEditSubmit(event)}>
+            <textarea
+              rows={5}
+              defaultValue={title}
+              onChange={(event) => handleChange(event.target.value)}
+            ></textarea>
+          </form>
         )}
       </article>
 
       <article className="right-side">
-        {
-          <EditTask
-            onSelectEdit={handleEditBtnClick}
-            onSubmitEdit={handleEditSubmit}
-            isEdit={isEdit}
-          />
-        }
+        {isEdit && (
+          <>
+            <SubmitButton type="submit" form={id} />
+            <CancelButton onClick={handleEditBtnClick} />
+          </>
+        )}
         {!isEdit && (
-          <DeleteTask
-            task={taskData}
-            fetchTasks={fetchTasks}
-          />
+          <>
+            <EditButton onClick={handleEditBtnClick} />
+            <DeleteTaskButton onClick={handleClickDelele} />
+          </>
         )}
       </article>
     </div>

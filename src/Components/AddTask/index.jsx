@@ -3,6 +3,8 @@ import "./AddTask.css";
 import { useState } from "react";
 import { addTask } from "../../api/https";
 
+import { MIN_TAKS_LENGTH, MAX_TAKS_LENGTH } from "../../constants/todos";
+
 export default function AddTask({ fetchTasks }) {
   const [newTask, setNewTask] = useState("");
 
@@ -11,16 +13,19 @@ export default function AddTask({ fetchTasks }) {
   }
 
   async function handleSubmit(event) {
-    await event.preventDefault();
-    if (!(newTask.length >= 2 && newTask.length <= 64)) {
+    event.preventDefault();
+    if (
+      !(newTask.length >= MIN_TAKS_LENGTH && newTask.length <= MAX_TAKS_LENGTH)
+    ) {
       return;
     }
-    setNewTask("");
     try {
       await addTask(newTask);
       await fetchTasks();
     } catch (error) {
       alert(`Ошибка: ${error.message}`);
+    } finally {
+      setNewTask("");
     }
   }
 
@@ -35,12 +40,12 @@ export default function AddTask({ fetchTasks }) {
           onChange={(event) => handleChange(event.target.value)}
         />
         <button>Добавить</button>
-        {newTask && newTask.length < 2 && (
+        {newTask && newTask.length < MIN_TAKS_LENGTH && (
           <p className="warning">
             Название задачи должно содержать минимум 2 символа
           </p>
         )}
-        {newTask && newTask.length > 64 && (
+        {newTask && newTask.length > MAX_TAKS_LENGTH && (
           <p className="warning">
             Название задачи должно содержать максимум 64 символа
           </p>

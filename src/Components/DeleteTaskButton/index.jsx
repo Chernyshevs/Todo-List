@@ -1,17 +1,7 @@
-import { deleteTask } from "../../api/https";
-
-export default function DeleteTask({ task, fetchTasks }) {
-  async function handleClick() {
-    try {
-      await deleteTask(task.id);
-      await fetchTasks();
-    } catch (error) {
-      alert(`Ошибка: ${error.message || "Не удалось удалить задачу"}`);
-    }
-  }
+export default function DeleteTaskButton({ onClick }) {
 
   return (
-    <button className="btn-card btn-red" onClick={handleClick}>
+    <button className="btn-card btn-red" onClick={onClick}>
       <svg
         fill="#ffffff"
         viewBox="0 0 24 24"

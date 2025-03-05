@@ -1,10 +1,6 @@
 import "./TaskStatuses.css";
 
-export default function TaskStatuses({
-  onSelect,
-  selectedTasks,
-  countTasks,
-}) {
+export default function TaskStatuses({ onSelect, selectedTasks, countTasks }) {
   return (
     <menu id="task-statuses">
       <li>
