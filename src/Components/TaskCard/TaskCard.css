@@ -14,8 +14,6 @@
   text-decoration: line-through;
 }
 
-
-
 .btn-card {
   width: 1.9rem;
   height: 1.8rem;
@@ -58,9 +56,8 @@
   cursor: pointer;
 }
 
-.task-card textarea{
-  padding: 5px;
+.task-card input {
+  padding: 4px;
   border: 1px solid black;
   border-radius: 4px;
-  resize: none;
 }

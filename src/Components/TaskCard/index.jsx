@@ -72,11 +72,10 @@ export default function TaskCard({ id, title, isDone, fetchTasks }) {
         {!isEdit && <p>{title}</p>}
         {isEdit && (
           <form id={id} onSubmit={(event) => handleEditSubmit(event)}>
-            <textarea
-              rows={5}
+            <input
               defaultValue={title}
               onChange={(event) => handleChange(event.target.value)}
-            ></textarea>
+            ></input>
           </form>
         )}
       </article>
