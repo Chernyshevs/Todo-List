@@ -4,16 +4,15 @@ import { useState } from "react";
 
 import { editTask } from "../../api/https";
 
-import CheckBox from "../CheckBox/CheckBox";
-import EditTask from "../EditTask/EditTask";
-import DeleteTask from "../DeleteTask/DeleteTask";
+import CheckBox from "../CheckBox";
+import EditTask from "../EditTask";
+import DeleteTask from "../DeleteTask";
 
 export default function TaskCard({
   id,
   title,
   isDone,
   fetchTasks,
-  fetchCountTasks,
 }) {
   const [taskData, setTaskData] = useState({
     id: id,
@@ -46,7 +45,6 @@ export default function TaskCard({
     try {
       await editTask(taskData.id, taskData.isDone, taskData.title);
       await fetchTasks();
-      await fetchCountTasks();
     } catch (error) {
       alert(`Ошибка: ${error.message || "Не удалось обновить задачу"}`);
     }
@@ -58,7 +56,6 @@ export default function TaskCard({
         <CheckBox
           task={taskData}
           fetchTasks={fetchTasks}
-          fetchCountTasks={fetchCountTasks}
         />
         {!isEdit && <p>{title}</p>}
         {isEdit && (
@@ -82,7 +79,6 @@ export default function TaskCard({
           <DeleteTask
             task={taskData}
             fetchTasks={fetchTasks}
-            fetchCountTasks={fetchCountTasks}
           />
         )}
       </article>

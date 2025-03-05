@@ -3,7 +3,7 @@ import "./AddTask.css";
 import { useState } from "react";
 import { addTask } from "../../api/https";
 
-export default function AddTask({ fetchTasks, fetchCountTasks }) {
+export default function AddTask({ fetchTasks }) {
   const [newTask, setNewTask] = useState("");
 
   function handleChange(changedText) {
@@ -19,7 +19,6 @@ export default function AddTask({ fetchTasks, fetchCountTasks }) {
     try {
       await addTask(newTask);
       await fetchTasks();
-      await fetchCountTasks();
     } catch (error) {
       alert(`Ошибка: ${error.message}`);
     }

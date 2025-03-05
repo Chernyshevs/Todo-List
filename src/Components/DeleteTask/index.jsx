@@ -1,11 +1,10 @@
 import { deleteTask } from "../../api/https";
 
-export default function DeleteTask({ task, fetchTasks, fetchCountTasks }) {
+export default function DeleteTask({ task, fetchTasks }) {
   async function handleClick() {
     try {
       await deleteTask(task.id);
       await fetchTasks();
-      await fetchCountTasks();
     } catch (error) {
       alert(`Ошибка: ${error.message || "Не удалось удалить задачу"}`);
     }

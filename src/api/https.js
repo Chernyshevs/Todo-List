@@ -9,18 +9,7 @@ export async function viewTasks(tasksStatus) {
     throw new Error("Произошла ошибка, попробуйте обновить страницу");
   }
   const resData = await response.json();
-  return resData.data;
-}
-
-export async function taskCounterByStatus() {
-  const response = await fetch("https://easydev.club/api/v1/todos?filter=all", {
-    method: "GET",
-  });
-  if (!response.ok) {
-    throw new Error("Произошла ошибка, попробуйте обновить страницу");
-  }
-  const resData = await response.json();
-  return resData.info;
+  return resData;
 }
 
 export async function editTask(id, status, title) {
