@@ -5,11 +5,13 @@ import { useState } from "react";
 import { editTask, deleteTask } from "../../api/https";
 
 import TodoStatusSwitching from "../TodoStatusSwitching";
+import IconButton from "../IconButton";
 // import EditTask from "../EditTask";
-import CancelButton from "../CancelButton";
-import SubmitButton from "../SubmitButton";
-import EditButton from "../EditButton";
-import DeleteTaskButton from "../DeleteTaskButton";
+import сancelIcon from "../../assets/cancelButton.svg";
+import submitIcon from "../../assets/submitButton.svg";
+import editIcon from "../../assets/editButton.svg";
+import deleteIcon from "../../assets/deleteButton.svg";
+import { MIN_TAKS_LENGTH, MAX_TAKS_LENGTH } from "../../constants/todos";
 
 export default function TaskCard({ id, title, isDone, fetchTasks }) {
   const [taskData, setTaskData] = useState({
@@ -19,22 +21,30 @@ export default function TaskCard({ id, title, isDone, fetchTasks }) {
   });
 
   const [isEdit, setIsEdit] = useState(false);
-  function handleEditBtnClick() {
-    setIsEdit((isEdit) => !isEdit);
+  function handleStartEdit() {
+    setIsEdit(true);
+  }
+  function handleEndEdit() {
+    setIsEdit(false);
   }
 
   function handleChange(changedTitle) {
     setTaskData((prevTaskData) => {
       return {
         ...prevTaskData,
-        title: changedTitle,
+        title: changedTitle.trim(),
       };
     });
   }
 
-  async function handleEditSubmit(event) {
+  async function handleToggleSubmit(event) {
     event.preventDefault();
-    if (!(taskData.title.length >= 2 && taskData.title.length <= 64)) {
+    if (
+      !(
+        taskData.title.length >= MIN_TAKS_LENGTH &&
+        taskData.title.length <= MAX_TAKS_LENGTH
+      )
+    ) {
       alert(
         "Название задачи должно содержать минимум 2 символа, максимум 64 символов"
       );
@@ -49,7 +59,7 @@ export default function TaskCard({ id, title, isDone, fetchTasks }) {
     }
   }
 
-  async function handleClickDelele() {
+  async function handleToggleDelele() {
     try {
       await deleteTask(id);
       await fetchTasks();
@@ -60,18 +70,11 @@ export default function TaskCard({ id, title, isDone, fetchTasks }) {
   return (
     <div className={`task-card ${isDone && "completed"}`}>
       <article className="left-side">
-        <input
-          type="checkbox"
-          value={isDone}
-          style={{
-            visibility: "hidden",
-            position: "absolute",
-          }}
-        />
+
         <TodoStatusSwitching task={taskData} fetchTasks={fetchTasks} />
         {!isEdit && <p>{title}</p>}
         {isEdit && (
-          <form id={id} onSubmit={(event) => handleEditSubmit(event)}>
+          <form id={id} onSubmit={(event) => handleToggleSubmit(event)}>
             <input
               defaultValue={title}
               onChange={(event) => handleChange(event.target.value)}
@@ -83,14 +86,22 @@ export default function TaskCard({ id, title, isDone, fetchTasks }) {
       <article className="right-side">
         {isEdit && (
           <>
-            <SubmitButton type="submit" form={id} />
-            <CancelButton onClick={handleEditBtnClick} />
+            <IconButton color="primary" type="submit">
+              {submitIcon}
+            </IconButton>
+            <IconButton color="error" onClick={handleEndEdit}>
+              {сancelIcon}
+            </IconButton>
           </>
         )}
         {!isEdit && (
           <>
-            <EditButton onClick={handleEditBtnClick} />
-            <DeleteTaskButton onClick={handleClickDelele} />
+            <IconButton color="primary" onClick={handleStartEdit}>
+              {editIcon}
+            </IconButton>
+            <IconButton color="error" onClick={handleToggleDelele}>
+              {deleteIcon}
+            </IconButton>
           </>
         )}
       </article>

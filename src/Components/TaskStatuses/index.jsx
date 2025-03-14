@@ -2,7 +2,7 @@ import "./TaskStatuses.css";
 
 export default function TaskStatuses({ onSelect, selectedTasks, countTasks }) {
   return (
-    <menu id="task-statuses">
+    <menu className="task-statuses">
       <li>
         <button
           onClick={() => onSelect("all")}

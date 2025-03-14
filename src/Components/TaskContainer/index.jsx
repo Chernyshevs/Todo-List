@@ -1,10 +1,10 @@
 import TaskCard from "../TaskCard";
 
-export default function TaskContainer({ fetchTasks, shownTasks}) {
+export default function TaskContainer({ fetchTasks, shownTasks }) {
   return (
     <section id="task-container">
+      {shownTasks.length === 0 && <p>Задач нет</p>}
       <ul>
-        {shownTasks.length === 0 && <p>Задач нет</p>}
         {shownTasks.map((task) => {
           return (
             <li key={task.id}>

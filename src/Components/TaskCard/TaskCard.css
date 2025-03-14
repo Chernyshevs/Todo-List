@@ -22,18 +22,18 @@
   cursor: pointer;
 }
 
-.btn-blue {
+.primary {
   background-color: rgb(85, 145, 255);
 }
-.btn-blue:hover {
+.primary:hover {
   background-color: rgb(49, 120, 252);
 }
 
-.btn-red {
+.error {
   background-color: rgb(255, 101, 95);
 }
 
-.btn-red:hover {
+.error:hover {
   background-color: rgb(248, 58, 52);
 }
 

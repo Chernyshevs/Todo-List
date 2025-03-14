@@ -1,11 +1,11 @@
-#add-task {
+.add-task {
   display: grid;
   grid-template-columns: 1fr 1fr;
   place-items: center;
   align-items: center;
 }
 
-#add-task input {
+.add-task input {
   background-color: inherit;
   border-color: transparent;
   border-bottom: 2px solid #3d7aff;
@@ -14,11 +14,11 @@
   margin-right: 1rem;
 }
 
-#add-task .warning {
+.add-task .warning {
   color: red;
 }
 
-#add-task button {
+.add-task button {
   background-color: rgb(85, 145, 255);
   color: white;
 
@@ -28,7 +28,7 @@
   transition: background-color 0.2s ease-out;
   cursor: pointer;
 }
-#add-task button:hover,
-#add-task button:focus {
+.add-task button:hover,
+.add-task button:focus {
   background-color: rgb(49, 120, 252);
 }

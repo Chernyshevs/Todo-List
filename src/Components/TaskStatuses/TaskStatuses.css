@@ -1,10 +1,10 @@
-#task-statuses {
+.task-statuses {
   display: flex;
   margin: 2rem 1rem;
   justify-content: space-between;
 }
 
-#task-statuses button {
+.task-statuses button {
   font-size: 1.1rem;
   color: rgb(135, 134, 132);
   background-color: transparent;
@@ -13,12 +13,12 @@
   cursor: pointer;
 }
 
-#task-statuses button:hover {
+.task-statuses button:hover {
   color: rgb(33, 172, 225);
   background-color: white;
 }
 
-#task-statuses button.active {
+.task-statuses button.active {
   color: rgb(33, 172, 225);
   text-decoration: underline;
   text-underline-offset: 5px;

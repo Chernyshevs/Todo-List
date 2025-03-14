@@ -1,54 +1,73 @@
+const API_URL = "https://easydev.club/api/v1";
+const ERROR_TEXT = "Произошла ошибка, попробуйте обновить страницу.";
+
 export async function viewTasks(tasksStatus) {
-  const response = await fetch(
-    `https://easydev.club/api/v1/todos?filter=${tasksStatus}`,
-    {
+  try {
+    const response = await fetch(`${API_URL}/todos?filter=${tasksStatus}`, {
       method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error(ERROR_TEXT);
     }
-  );
-  if (!response.ok) {
-    throw new Error("Произошла ошибка, попробуйте обновить страницу");
+    return await response.json();
+  } catch (error) {
+    console.error("Ошибка при получении задач:", error);
+    throw error;
   }
-  const resData = await response.json();
-  return resData;
 }
 
 export async function editTask(id, status, title) {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-    body: JSON.stringify({
-      isDone: status,
-      title: title,
-    }),
-  });
-  if (!response.ok) {
-    throw new Error("Произошла ошибка, попробуйте обновить страницу.");
+  try {
+    const response = await fetch(`${API_URL}/todos/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        isDone: status,
+        title: title,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(ERROR_TEXT);
+    }
+  } catch (error) {
+    console.error("Ошибка при редактировании задачи:", error);
+    throw error;
   }
 }
 
 export async function deleteTask(id) {
-  const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
-    method: "DELETE",
-  });
-  if (!response.ok) {
-    throw new Error("Произошла ошибка, попробуйте обновить страницу.");
+  try {
+    const response = await fetch(`${API_URL}/todos/${id}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error(ERROR_TEXT);
+    }
+  } catch (error) {
+    console.error("Ошибка при удалении задачи:", error);
+    throw error;
   }
 }
 
-export async function addTask(title, status=false) {
-  const response = await fetch(`https://easydev.club/api/v1/todos`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-    body: JSON.stringify({
-      isDone: status,
-      title: title,
-    }),
-  });
-  if (!response.ok) {
-    throw new Error("Произошла ошибка, попробуйте обновить страницу");
+export async function addTask(title, status = false) {
+  try {
+    const response = await fetch(`${API_URL}/todos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        isDone: status,
+        title: title,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(ERROR_TEXT);
+    }
+  } catch (error) {
+    console.error("Ошибка при добавлении задачи:", error);
+    throw error;
   }
 }

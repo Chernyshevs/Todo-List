@@ -12,7 +12,7 @@ export default function AddTask({ fetchTasks }) {
     setNewTask(changedText);
   }
 
-  async function handleSubmit(event) {
+  async function handleToggleSubmit(event) {
     event.preventDefault();
     if (
       !(newTask.length >= MIN_TAKS_LENGTH && newTask.length <= MAX_TAKS_LENGTH)
@@ -31,7 +31,7 @@ export default function AddTask({ fetchTasks }) {
 
   return (
     <section>
-      <form id="add-task" onSubmit={handleSubmit}>
+      <form className="add-task" onSubmit={handleToggleSubmit}>
         <input
           required
           value={newTask}
