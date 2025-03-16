@@ -22,7 +22,7 @@ const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
       return;
     }
     try {
-      await addTask(newTask);
+      await addTask({title: newTask, isDone: false});
       await fetchTasks();
     } catch (error: any) {
       alert(`Ошибка: ${error.message}`);
