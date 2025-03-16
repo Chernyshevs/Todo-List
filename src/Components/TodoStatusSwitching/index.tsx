@@ -1,23 +1,37 @@
 import emptyMark from "../../assets/empty-mark.png";
 import checkMark from "../../assets/check-mark.png";
-import { editTask } from "../../api/https";
+import { editTask, Todo } from "../../api/https";
 
-export default function TodoStatusSwitching({ task, fetchTasks}) {
-  async function handleClickEditMark(statusMark) {
+const TodoStatusSwitching: React.FC<{
+  task: Todo;
+  fetchTasks: () => Promise<void>;
+}> = ({ task, fetchTasks }) => {
+  const handleToggleCheckBox = async () => {
     try {
-      await editTask(task.id, !statusMark, task.title);
+      await editTask(task.id, {title: task.title, isDone: task.isDone});
       await fetchTasks();
-    } catch (error) {
+    } catch (error: any) {
       alert(`Ошибка: ${error.message || "Не удалось обновить задачу"}`);
     }
   }
 
   return (
-    <img
-      src={task.isDone ? checkMark : emptyMark}
-      alt=""
-      className="mark"
-      onClick={() => handleClickEditMark(task.isDone)}
-    />
+    <>
+      <input
+        type="checkbox"
+        checked={task.isDone}
+        style={{
+          visibility: "hidden",
+          position: "absolute",
+        }}
+      />
+      <img
+        src={task.isDone ? checkMark : emptyMark}
+        alt=""
+        className="mark"
+        onClick={handleToggleCheckBox}
+      />
+    </>
   );
-}
+};
+export default TodoStatusSwitching;

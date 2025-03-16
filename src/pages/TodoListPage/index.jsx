@@ -4,37 +4,37 @@ import AddTask from "../../Components/AddTask";
 import TaskContainer from "../../Components/TaskContainer";
 import TaskStatuses from "../../Components/TaskStatuses";
 
-import { TodoInfo, Todo, viewTasks } from "../../api/https";
+import { viewTasks } from "../../api/https.js";
 
-const TodoListPage: React.FC = () => {
+export default function TodoListPage() {
   const [selectedTasks, setSelectedTasks] = useState("all");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<{ message: string }>();
+  const [error, setError] = useState();
 
-  const [shownTasks, setShownTasks] = useState<Todo[]>();
-  const [countTasks, setCountTasks] = useState<TodoInfo>();
+  const [shownTasks, setShownTasks] = useState([]);
+  const [countTasks, setCountTasks] = useState({});
 
   useEffect(() => {
     fetchTasks();
   }, [selectedTasks]);
 
-  const handleSelectTasks = (selectedButton: string) => {
+  function handleSelectTasks(selectedButton) {
     setSelectedTasks(selectedButton);
-  };
+  }
 
-  const fetchTasks: () => Promise<void> = async () => {
+  async function fetchTasks() {
     try {
       setIsLoading(true);
       const tasks = await viewTasks(selectedTasks);
       setShownTasks(tasks.data);
       setCountTasks(tasks.info);
-    } catch (error: any) {
+    } catch (error) {
       setError({ message: error.message });
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   if (error) {
     alert("Произошла ошибка. Попробуйте перезагрузить страницу!");
@@ -53,13 +53,15 @@ const TodoListPage: React.FC = () => {
             <TaskStatuses
               onSelect={handleSelectTasks}
               selectedTasks={selectedTasks}
-              countTasks={countTasks!}
+              countTasks={countTasks}
             />
-            <TaskContainer fetchTasks={fetchTasks} shownTasks={shownTasks!} />
+            <TaskContainer
+              fetchTasks={fetchTasks}
+              shownTasks={shownTasks}
+            />
           </div>
         )}
       </main>
     </>
   );
-};
-export default TodoListPage;
+}
