@@ -96,7 +96,7 @@ const TaskCard: React.FC<{
       <article className="right-side">
         {isEdit && (
           <>
-            <IconButton color="primary" type="submit">
+            <IconButton color="primary" type="submit" form={`task_${id}`}>
               {submitIcon}
             </IconButton>
             <IconButton color="error" onClick={handleEndEdit}>

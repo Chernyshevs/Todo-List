@@ -8,7 +8,7 @@ const TodoStatusSwitching: React.FC<{
 }> = ({ task, fetchTasks }) => {
   const handleToggleCheckBox = async () => {
     try {
-      await editTask(task.id, {title: task.title, isDone: task.isDone});
+      await editTask(task.id, {title: task.title, isDone: !task.isDone});
       await fetchTasks();
     } catch (error: any) {
       alert(`Ошибка: ${error.message || "Не удалось обновить задачу"}`);
@@ -19,7 +19,7 @@ const TodoStatusSwitching: React.FC<{
     <>
       <input
         type="checkbox"
-        checked={task.isDone}
+        defaultChecked={task.isDone}
         style={{
           visibility: "hidden",
           position: "absolute",
