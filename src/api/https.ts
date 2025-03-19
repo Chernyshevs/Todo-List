@@ -29,7 +29,7 @@ export interface MetaResponse<T, N> {
   };
 }
 
-export async function viewTasks(tasksStatus: string) {
+export const viewTasks = async (tasksStatus: string) => {
   try {
     const response = await fetch(`${API_URL}/todos?filter=${tasksStatus}`, {
       method: "GET",
@@ -42,9 +42,9 @@ export async function viewTasks(tasksStatus: string) {
     console.error("Ошибка при получении задач:", error);
     throw error;
   }
-}
+};
 
-export async function editTask(id: number, changedData: TodoRequest) {
+export const editTask = async (id: number, changedData: TodoRequest) => {
   try {
     const response = await fetch(`${API_URL}/todos/${id}`, {
       method: "PUT",
@@ -60,9 +60,9 @@ export async function editTask(id: number, changedData: TodoRequest) {
     console.error("Ошибка при редактировании задачи:", error);
     throw error;
   }
-}
+};
 
-export async function deleteTask(id: number) {
+export const deleteTask = async (id: number) => {
   try {
     const response = await fetch(`${API_URL}/todos/${id}`, {
       method: "DELETE",
@@ -74,9 +74,9 @@ export async function deleteTask(id: number) {
     console.error("Ошибка при удалении задачи:", error);
     throw error;
   }
-}
+};
 
-export async function addTask(todoData: TodoRequest) {
+export const addTask = async (todoData: TodoRequest) => {
   try {
     const response = await fetch(`${API_URL}/todos`, {
       method: "POST",
@@ -90,6 +90,21 @@ export async function addTask(todoData: TodoRequest) {
     }
   } catch (error) {
     console.error("Ошибка при добавлении задачи:", error);
+    throw error;
+  }
+};
+
+export const getTask = async (id: number) => {
+  try {
+    const response = await fetch(`${API_URL}/todos/${id}`, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error(ERROR_TEXT);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Ошибка при получении задачи:", error);
     throw error;
   }
 }
