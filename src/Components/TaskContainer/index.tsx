@@ -1,4 +1,4 @@
-import { Todo } from "../../api/https";
+import { Todo } from "../../types/todoTypes";
 import TaskCard from "../TaskCard";
 
 const TaskContainer: React.FC<{

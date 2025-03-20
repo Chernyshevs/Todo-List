@@ -2,7 +2,8 @@ import "./TaskCard.css";
 
 import { useState, useRef } from "react";
 
-import { editTask, deleteTask, Todo, getTask } from "../../api/https";
+import { editTask, deleteTask, getTask } from "../../api/https";
+import { Todo } from "../../types/todoTypes";
 
 import TodoStatusSwitching from "../TodoStatusSwitching";
 import IconButton from "../IconButton";

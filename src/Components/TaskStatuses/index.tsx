@@ -1,5 +1,5 @@
 import "./TaskStatuses.css";
-import { TodoInfo } from "../../api/https";
+import { TodoInfo } from "../../types/todoTypes";
 
 const TaskStatuses: React.FC<{
   onSelect: (selectedButton: string) => void;

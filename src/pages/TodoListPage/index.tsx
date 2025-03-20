@@ -4,12 +4,13 @@ import AddTask from "../../Components/AddTask";
 import TaskContainer from "../../Components/TaskContainer";
 import TaskStatuses from "../../Components/TaskStatuses";
 
-import { TodoInfo, Todo, viewTasks } from "../../api/https";
+import { TodoInfo, Todo } from "../../types/todoTypes";
+import { viewTasks } from "../../api/https";
 
 const TodoListPage: React.FC = () => {
   const [selectedTasks, setSelectedTasks] = useState("all");
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<{ message: string }>();
 
   const [shownTasks, setShownTasks] = useState<Todo[]>();
@@ -18,7 +19,6 @@ const TodoListPage: React.FC = () => {
   useEffect(() => {
     fetchTasks();
   }, [selectedTasks]);
-
   const handleSelectTasks = (selectedButton: string) => {
     setSelectedTasks(selectedButton);
   };
@@ -35,11 +35,9 @@ const TodoListPage: React.FC = () => {
       setIsLoading(false);
     }
   };
-
   if (error) {
     alert("Произошла ошибка. Попробуйте перезагрузить страницу!");
   }
-
   return (
     <>
       <header id="header-main">

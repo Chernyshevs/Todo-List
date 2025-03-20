@@ -1,7 +1,7 @@
 import emptyMark from "../../assets/empty-mark.png";
 import checkMark from "../../assets/check-mark.png";
-import { editTask, Todo } from "../../api/https";
-
+import { editTask } from "../../api/https";
+import { Todo } from "../../types/todoTypes";
 const TodoStatusSwitching: React.FC<{
   task: Todo;
   fetchTasks: () => Promise<void>;
