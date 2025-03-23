@@ -4,42 +4,46 @@ import AddTask from "../../Components/AddTask";
 import TaskContainer from "../../Components/TaskContainer";
 import TaskStatuses from "../../Components/TaskStatuses";
 
-import { viewTasks } from "../../api/https.js";
+import { TodoInfo, Todo, TodoStatus } from "../../types/todoTypes";
+import { getTasks } from "../../api/https";
 
-export default function TodoListPage() {
-  const [selectedTasks, setSelectedTasks] = useState("all");
+const TodoListPage: React.FC = () => {
+  const [selectedTasks, setSelectedTasks] = useState<TodoStatus>("all");
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<{ message: string }>();
 
-  const [shownTasks, setShownTasks] = useState([]);
-  const [countTasks, setCountTasks] = useState({});
+  const [Tasks, setTasks] = useState<Todo[]>([
+    { id: 0, title: "", created: "", isDone: false },
+  ]);
+  const [countTasks, setCountTasks] = useState<TodoInfo>({
+    all: 0,
+    inWork: 0,
+    completed: 0,
+  });
 
   useEffect(() => {
     fetchTasks();
   }, [selectedTasks]);
-
-  function handleSelectTasks(selectedButton) {
+  const handleSelectTasks = (selectedButton: TodoStatus) => {
     setSelectedTasks(selectedButton);
-  }
+  };
 
-  async function fetchTasks() {
+  const fetchTasks: () => Promise<void> = async () => {
     try {
       setIsLoading(true);
-      const tasks = await viewTasks(selectedTasks);
-      setShownTasks(tasks.data);
+      const tasks = await getTasks(selectedTasks);
+      setTasks(tasks.data);
       setCountTasks(tasks.info);
-    } catch (error) {
+    } catch (error: any) {
       setError({ message: error.message });
     } finally {
       setIsLoading(false);
     }
-  }
-
+  };
   if (error) {
     alert("Произошла ошибка. Попробуйте перезагрузить страницу!");
   }
-
   return (
     <>
       <header id="header-main">
@@ -55,13 +59,11 @@ export default function TodoListPage() {
               selectedTasks={selectedTasks}
               countTasks={countTasks}
             />
-            <TaskContainer
-              fetchTasks={fetchTasks}
-              shownTasks={shownTasks}
-            />
+            <TaskContainer fetchTasks={fetchTasks} Tasks={Tasks} />
           </div>
         )}
       </main>
     </>
   );
-}
+};
+export default TodoListPage;

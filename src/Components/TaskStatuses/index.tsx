@@ -1,6 +1,11 @@
 import "./TaskStatuses.css";
+import { TodoInfo, TodoStatus } from "../../types/todoTypes";
 
-export default function TaskStatuses({ onSelect, selectedTasks, countTasks }) {
+const TaskStatuses: React.FC<{
+  onSelect: (selectedButton: TodoStatus) => void;
+  selectedTasks: TodoStatus;
+  countTasks: TodoInfo
+}> = ({ onSelect, selectedTasks, countTasks }) => {
   return (
     <menu className="task-statuses">
       <li>
@@ -29,4 +34,5 @@ export default function TaskStatuses({ onSelect, selectedTasks, countTasks }) {
       </li>
     </menu>
   );
-}
+};
+export default TaskStatuses;

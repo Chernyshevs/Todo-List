@@ -5,14 +5,16 @@ import { addTask } from "../../api/https";
 
 import { MIN_TAKS_LENGTH, MAX_TAKS_LENGTH } from "../../constants/todos";
 
-export default function AddTask({ fetchTasks }) {
-  const [newTask, setNewTask] = useState("");
+const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
+  fetchTasks,
+}) => {
+  const [newTask, setNewTask] = useState<string>("");
 
-  function handleChange(changedText) {
+  const handleChange = (changedText: string) => {
     setNewTask(changedText);
-  }
+  };
 
-  async function handleToggleSubmit(event) {
+  const handleToggleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (
       !(newTask.length >= MIN_TAKS_LENGTH && newTask.length <= MAX_TAKS_LENGTH)
@@ -20,14 +22,14 @@ export default function AddTask({ fetchTasks }) {
       return;
     }
     try {
-      await addTask(newTask);
+      await addTask({ title: newTask, isDone: false });
       await fetchTasks();
-    } catch (error) {
+    } catch (error: any) {
       alert(`Ошибка: ${error.message}`);
     } finally {
       setNewTask("");
     }
-  }
+  };
 
   return (
     <section>
@@ -53,4 +55,5 @@ export default function AddTask({ fetchTasks }) {
       </form>
     </section>
   );
-}
+};
+export default AddTask;
