@@ -1,8 +1,8 @@
 import "./TaskCard.css";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 
-import { editTask, deleteTask, getTask } from "../../api/https";
+import { editTask, deleteTask } from "../../api/https";
 import { Todo } from "../../types/todoTypes";
 
 import TodoStatusSwitching from "../TodoStatusSwitching";
@@ -15,42 +15,20 @@ import deleteIcon from "../../assets/deleteButton.svg";
 import { MIN_TAKS_LENGTH, MAX_TAKS_LENGTH } from "../../constants/todos";
 
 const TaskCard: React.FC<{
-  id: number;
-  title: string;
-  created: string;
-  isDone: boolean;
+  todo: Todo;
   fetchTasks: () => Promise<void>;
-}> = ({ id, title, created, isDone, fetchTasks }) => {
-  const [taskData, setTaskData] = useState<Todo>({
-    id: id,
-    title: title,
-    created: created,
-    isDone: isDone,
-  });
-  const todoTextInputRef = useRef<HTMLInputElement>(null);
-  const [isEdit, setIsEdit] = useState(false);
-  const handleStartEdit = async () => {
-    try {
-      const urgentTask = await getTask(id);
-      setTaskData((prevTaskData) => {
-        return {
-          ...prevTaskData,
-          title: urgentTask.title
-        }
-      })
-    } catch {
-      await fetchTasks();
-      alert("Задачи не существует");
-    } finally {
-      setIsEdit(true);
-    }
+}> = ({ todo, fetchTasks }) => {
+  const [taskData, setTaskData] = useState<Todo>(todo);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const handleStartEdit = () => {
+    setIsEdit(true);
   };
   const handleEndEdit = () => {
     setIsEdit(false);
   };
-  const handleToggleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    const enteredText = todoTextInputRef.current!.value;
+    const enteredText = taskData.title;
     if (
       !(
         enteredText.trim().length >= MIN_TAKS_LENGTH &&
@@ -62,7 +40,6 @@ const TaskCard: React.FC<{
       );
       return;
     }
-    setIsEdit((isEdit) => !isEdit);
     try {
       await editTask(taskData.id, {
         title: enteredText.trim(),
@@ -71,30 +48,41 @@ const TaskCard: React.FC<{
       await fetchTasks();
     } catch (error: any) {
       alert(`Ошибка: ${error.message || "Не удалось обновить задачу"}`);
+    } finally {
+      setIsEdit(false);
     }
+  };
+
+  const handleChange = (event: any) => {
+    setTaskData((prevTaskData) => {
+      return {
+        ...prevTaskData,
+        title: event.target.value,
+      };
+    });
   };
 
   const handleToggleDelele = async () => {
     try {
-      await deleteTask(id);
+      await deleteTask(todo.id);
       await fetchTasks();
     } catch (error: any) {
       alert(`Ошибка: ${error.message || "Не удалось удалить задачу"}`);
     }
   };
   return (
-    <div className={`task-card ${isDone && "completed"}`}>
+    <div className={`task-card ${todo.isDone && "completed"}`}>
       <article className="left-side">
         <TodoStatusSwitching task={taskData} fetchTasks={fetchTasks} />
-        {!isEdit && <p>{taskData.title}</p>}
+        {!isEdit && <p>{todo.title}</p>}
         {isEdit && (
           <form
-            id={`task_${id}`}
-            onSubmit={(event) => handleToggleSubmit(event)}
+            id={`task_${todo.id}`}
+            onSubmit={handleSubmit}
           >
             <input
-              defaultValue={taskData.title}
-              ref={todoTextInputRef}
+              defaultValue={todo.title}
+              onChange={handleChange}
             ></input>
           </form>
         )}
@@ -103,7 +91,7 @@ const TaskCard: React.FC<{
       <article className="right-side">
         {isEdit && (
           <>
-            <IconButton color="primary" type="submit" form={`task_${id}`}>
+            <IconButton color="primary" type="submit" form={`task_${todo.id}`}>
               {submitIcon}
             </IconButton>
             <IconButton color="error" onClick={handleEndEdit}>

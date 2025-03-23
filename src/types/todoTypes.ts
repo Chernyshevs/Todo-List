@@ -17,3 +17,5 @@ export interface TodoInfo {
   completed: number;
   inWork: number;
 }
+
+export type TodoStatus = "all" | "inWork" | "completed"

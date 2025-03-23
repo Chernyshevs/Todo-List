@@ -8,7 +8,7 @@ import { MIN_TAKS_LENGTH, MAX_TAKS_LENGTH } from "../../constants/todos";
 const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
   fetchTasks,
 }) => {
-  const [newTask, setNewTask] = useState("");
+  const [newTask, setNewTask] = useState<string>("");
 
   const handleChange = (changedText: string) => {
     setNewTask(changedText);
@@ -22,7 +22,7 @@ const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
       return;
     }
     try {
-      await addTask({title: newTask, isDone: false});
+      await addTask({ title: newTask, isDone: false });
       await fetchTasks();
     } catch (error: any) {
       alert(`Ошибка: ${error.message}`);

@@ -1,9 +1,9 @@
 import "./TaskStatuses.css";
-import { TodoInfo } from "../../types/todoTypes";
+import { TodoInfo, TodoStatus } from "../../types/todoTypes";
 
 const TaskStatuses: React.FC<{
-  onSelect: (selectedButton: string) => void;
-  selectedTasks: string;
+  onSelect: (selectedButton: TodoStatus) => void;
+  selectedTasks: TodoStatus;
   countTasks: TodoInfo
 }> = ({ onSelect, selectedTasks, countTasks }) => {
   return (

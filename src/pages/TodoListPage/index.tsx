@@ -4,30 +4,36 @@ import AddTask from "../../Components/AddTask";
 import TaskContainer from "../../Components/TaskContainer";
 import TaskStatuses from "../../Components/TaskStatuses";
 
-import { TodoInfo, Todo } from "../../types/todoTypes";
-import { viewTasks } from "../../api/https";
+import { TodoInfo, Todo, TodoStatus } from "../../types/todoTypes";
+import { getTasks } from "../../api/https";
 
 const TodoListPage: React.FC = () => {
-  const [selectedTasks, setSelectedTasks] = useState("all");
+  const [selectedTasks, setSelectedTasks] = useState<TodoStatus>("all");
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<{ message: string }>();
 
-  const [shownTasks, setShownTasks] = useState<Todo[]>();
-  const [countTasks, setCountTasks] = useState<TodoInfo>();
+  const [Tasks, setTasks] = useState<Todo[]>([
+    { id: 0, title: "", created: "", isDone: false },
+  ]);
+  const [countTasks, setCountTasks] = useState<TodoInfo>({
+    all: 0,
+    inWork: 0,
+    completed: 0,
+  });
 
   useEffect(() => {
     fetchTasks();
   }, [selectedTasks]);
-  const handleSelectTasks = (selectedButton: string) => {
+  const handleSelectTasks = (selectedButton: TodoStatus) => {
     setSelectedTasks(selectedButton);
   };
 
   const fetchTasks: () => Promise<void> = async () => {
     try {
       setIsLoading(true);
-      const tasks = await viewTasks(selectedTasks);
-      setShownTasks(tasks.data);
+      const tasks = await getTasks(selectedTasks);
+      setTasks(tasks.data);
       setCountTasks(tasks.info);
     } catch (error: any) {
       setError({ message: error.message });
@@ -51,9 +57,9 @@ const TodoListPage: React.FC = () => {
             <TaskStatuses
               onSelect={handleSelectTasks}
               selectedTasks={selectedTasks}
-              countTasks={countTasks!}
+              countTasks={countTasks}
             />
-            <TaskContainer fetchTasks={fetchTasks} shownTasks={shownTasks!} />
+            <TaskContainer fetchTasks={fetchTasks} Tasks={Tasks} />
           </div>
         )}
       </main>

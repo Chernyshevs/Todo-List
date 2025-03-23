@@ -3,7 +3,7 @@ const ERROR_TEXT = "Произошла ошибка, попробуйте обн
 
 import { TodoRequest } from "../types/todoTypes";
 
-export const viewTasks = async (tasksStatus: string) => {
+export const getTasks = async (tasksStatus: string) => {
   try {
     const response = await fetch(`${API_URL}/todos?filter=${tasksStatus}`, {
       method: "GET",
@@ -67,18 +67,3 @@ export const addTask = async (todoData: TodoRequest) => {
     throw error;
   }
 };
-
-export const getTask = async (id: number) => {
-  try {
-    const response = await fetch(`${API_URL}/todos/${id}`, {
-      method: "GET",
-    });
-    if (!response.ok) {
-      throw new Error(ERROR_TEXT);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка при получении задачи:", error);
-    throw error;
-  }
-}
