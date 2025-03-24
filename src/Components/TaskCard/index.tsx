@@ -23,7 +23,6 @@ const TaskCard: React.FC<{
   todo: Todo;
   fetchTasks: () => Promise<void>;
 }> = ({ todo, fetchTasks }) => {
-  const [taskData, setTaskData] = useState<Todo>(todo);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const handleStartEdit = () => {
     setIsEdit(true);
@@ -35,9 +34,9 @@ const TaskCard: React.FC<{
   const handleSubmit: FormProps<FieldNameTask>["onFinish"] = async (values) => {
     console.log("Success:", values);
     try {
-      await editTask(taskData.id, {
+      await editTask(todo.id, {
         title: values.taskname?.trim(),
-        isDone: taskData.isDone,
+        isDone: todo.isDone,
       });
       await fetchTasks();
     } catch (error: any) {
@@ -62,9 +61,13 @@ const TaskCard: React.FC<{
     }
   };
   return (
-    <div className={isEdit ? "task-card" : `task-card ${todo.isDone && "completed"}`}>
+    <div
+      className={
+        isEdit ? "task-card" : `task-card ${todo.isDone && "completed"}`
+      }
+    >
       <article className="left-side">
-        <TodoStatusSwitching task={taskData} fetchTasks={fetchTasks} />
+        <TodoStatusSwitching task={todo} fetchTasks={fetchTasks} />
         {!isEdit && <p>{todo.title}</p>}
         {isEdit && (
           <>
@@ -91,7 +94,11 @@ const TaskCard: React.FC<{
                   },
                 ]}
               >
-                <Input placeholder="Название задачи" size="large" />
+                <Input
+                  placeholder="Название задачи"
+                  size="large"
+                  defaultValue={todo.title}
+                />
               </Form.Item>
             </Form>
           </>
