@@ -1,36 +1,23 @@
-import emptyMark from "../../assets/empty-mark.png";
-import checkMark from "../../assets/check-mark.png";
+import { Checkbox } from "antd";
+import type { CheckboxProps } from "antd";
+
 import { editTask } from "../../api/https";
 import { Todo } from "../../types/todoTypes";
 const TodoStatusSwitching: React.FC<{
   task: Todo;
   fetchTasks: () => Promise<void>;
 }> = ({ task, fetchTasks }) => {
-  const handleToggleCheckBox = async () => {
+  const onChange: CheckboxProps["onChange"] = async (e) => {
     try {
-      await editTask(task.id, {title: task.title, isDone: !task.isDone});
+      await editTask(task.id, { title: task.title, isDone: e.target.checked });
       await fetchTasks();
     } catch (error: any) {
       alert(`Ошибка: ${error.message || "Не удалось обновить задачу"}`);
     }
-  }
-
+  };
   return (
     <>
-      <input
-        type="checkbox"
-        defaultChecked={task.isDone}
-        style={{
-          visibility: "hidden",
-          position: "absolute",
-        }}
-      />
-      <img
-        src={task.isDone ? checkMark : emptyMark}
-        alt=""
-        className="mark"
-        onClick={handleToggleCheckBox}
-      />
+      <Checkbox defaultChecked={task.isDone} onChange={onChange}></Checkbox>
     </>
   );
 };
