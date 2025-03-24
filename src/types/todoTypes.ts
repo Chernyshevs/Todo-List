@@ -19,3 +19,5 @@ export interface TodoInfo {
 }
 
 export type TodoStatus = "all" | "inWork" | "completed"
+
+export type FieldAddTask = {taskname?: string};
