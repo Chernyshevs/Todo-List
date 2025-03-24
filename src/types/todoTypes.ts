@@ -20,7 +20,7 @@ export interface TodoInfo {
   inWork: number;
 }
 
-export type FieldAddTask = {taskname?: string};
+export type FieldNameTask = {taskname?: string};
 
 export type MenuStatuses = Required<MenuProps>['items'][number];
 export type TodoStatus = "all" | "inWork" | "completed"

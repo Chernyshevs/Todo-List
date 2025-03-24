@@ -1,13 +1,13 @@
 import { addTask } from "../../api/https";
 import { Form, Input, Button } from "antd";
 import type { FormProps } from "antd";
-import type { FieldAddTask } from "../../types/todoTypes";
+import type { FieldNameTask } from "../../types/todoTypes";
 import { MIN_TAKS_LENGTH, MAX_TAKS_LENGTH } from "../../constants/todos";
 
 const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
   fetchTasks,
 }) => {
-  const onFinish: FormProps<FieldAddTask>["onFinish"] = async (values) => {
+  const handleAddTask: FormProps<FieldNameTask>["onFinish"] = async (values) => {
     console.log("Success:", values);
     try {
       await addTask({ title: values.taskname?.trim(), isDone: false });
@@ -18,7 +18,7 @@ const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
     }
   };
 
-  const onFinishFailed: FormProps<FieldAddTask>["onFinishFailed"] = (
+  const onFinishFailed: FormProps<FieldNameTask>["onFinishFailed"] = (
     errorInfo
   ) => {
     console.log("Failed:", errorInfo);
@@ -30,11 +30,11 @@ const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
         name="basic"
         layout="inline"
         style={{ justifyContent: "center" }}
-        onFinish={onFinish}
+        onFinish={handleAddTask}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <Form.Item<FieldAddTask>
+        <Form.Item<FieldNameTask>
           style={{ width: "55%" }}
           name="taskname"
           rules={[
