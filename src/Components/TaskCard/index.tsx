@@ -32,7 +32,6 @@ const TaskCard: React.FC<{
   };
 
   const handleSubmit: FormProps<FieldNameTask>["onFinish"] = async (values) => {
-    console.log("Success:", values);
     try {
       await editTask(todo.id, {
         title: values.taskname?.trim(),
@@ -72,7 +71,8 @@ const TaskCard: React.FC<{
         {isEdit && (
           <>
             <Form
-              name="basic"
+              name={`task_form_${todo.id}`}
+              initialValues={{taskname: todo.title}}
               layout="inline"
               onFinish={handleSubmit}
               onFinishFailed={onFinishFailed}
@@ -97,7 +97,6 @@ const TaskCard: React.FC<{
                 <Input
                   placeholder="Название задачи"
                   size="large"
-                  defaultValue={todo.title}
                 />
               </Form.Item>
             </Form>

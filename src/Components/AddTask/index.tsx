@@ -8,7 +8,6 @@ const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
   fetchTasks,
 }) => {
   const handleAddTask: FormProps<FieldNameTask>["onFinish"] = async (values) => {
-    console.log("Success:", values);
     try {
       await addTask({ title: values.taskname?.trim(), isDone: false });
       await fetchTasks();
