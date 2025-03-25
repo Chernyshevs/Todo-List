@@ -25,7 +25,6 @@ const TaskStatuses: React.FC<{
     },
   ];
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
     onSelect(e.key as TodoStatus);
   };
   return (
