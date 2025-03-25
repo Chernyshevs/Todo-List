@@ -24,7 +24,6 @@ const TodoListPage: React.FC = () => {
   const [numberTimer, setNumberTimer] = useState(1);
   useEffect(() => {
     // таймер пересоздаётся каждый раз когда обновляется numberTimer
-    console.log("Проходка!");
     const id = setInterval(() => setNumberTimer(numberTimer + 1), 5000);
     fetchTasks();
     return () => {

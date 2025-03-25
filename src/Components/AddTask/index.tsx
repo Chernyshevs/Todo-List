@@ -3,20 +3,22 @@ import { Form, Input, Button } from "antd";
 import type { FormProps } from "antd";
 import type { FieldNameTask } from "../../types/todoTypes";
 import { MIN_TAKS_LENGTH, MAX_TAKS_LENGTH } from "../../constants/todos";
-
 const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
   fetchTasks,
 }) => {
-  const handleAddTask: FormProps<FieldNameTask>["onFinish"] = async (values) => {
+  const [form] = Form.useForm();
+  const handleAddTask: FormProps<FieldNameTask>["onFinish"] = async (
+    values
+  ) => {
     try {
       await addTask({ title: values.taskname?.trim(), isDone: false });
       await fetchTasks();
     } catch (error: any) {
       alert(`Ошибка: ${error.message}`);
     } finally {
+      form.resetFields();
     }
   };
-
   const onFinishFailed: FormProps<FieldNameTask>["onFinishFailed"] = (
     errorInfo
   ) => {
@@ -32,6 +34,7 @@ const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
         onFinish={handleAddTask}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
+        form={form}
       >
         <Form.Item<FieldNameTask>
           style={{ width: "55%" }}
@@ -48,7 +51,7 @@ const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
             },
           ]}
         >
-          <Input placeholder="Название задачи" size="large"/>
+          <Input placeholder="Название задачи" size="large" />
         </Form.Item>
 
         <Form.Item label={null}>
