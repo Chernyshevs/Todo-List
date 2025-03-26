@@ -3,12 +3,13 @@ import { TodoInfo, TodoStatus } from "../../types/todoTypes";
 import { Menu } from "antd";
 import { MenuProps } from "antd";
 import { MenuStatuses } from "../../types/todoTypes";
+import { memo } from "react";
 
 const TaskStatuses: React.FC<{
   onSelect: (selectedButton: TodoStatus) => void;
   selectedTasks: TodoStatus;
   countTasks: TodoInfo;
-}> = ({ onSelect, selectedTasks, countTasks }) => {
+}> = memo (({ onSelect, selectedTasks, countTasks }) => {
   const items: MenuStatuses[] = [
     {
       label: `Все(${countTasks.all})`,
@@ -36,5 +37,5 @@ const TaskStatuses: React.FC<{
       style={{ backgroundColor: "inherit", justifyContent: "center" }}
     />
   );
-};
+});
 export default TaskStatuses;

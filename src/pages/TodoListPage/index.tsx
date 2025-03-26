@@ -25,23 +25,25 @@ const TodoListPage: React.FC = () => {
 
   useEffect(() => {
     // таймер пересоздаётся каждый раз когда обновляется numberTimer
-    const id = setInterval(() => setNumberTimer(numberTimer + 1), 5000);
+    const id = setInterval(() => setNumberTimer((numberTimer + 1)), 5000);
     fetchTasks();
     return () => {
       clearInterval(id);
     };
   }, [selectedTasks, numberTimer]);
-  const handleSelectTasks = (selectedButton: TodoStatus) => {
-    setSelectedTasks(selectedButton);
-  };
+  const handleSelectTasks = useCallback(
+    (selectedButton: TodoStatus) => {
+      setSelectedTasks(selectedButton);
+    },
+    [selectedTasks, countTasks]
+  );
 
   const fetchTasks = useCallback(async () => {
     try {
       setIsLoading(true);
       const tasks = await getTasks(selectedTasks);
-      setTasks((prevTasks) => {
-        if (!Array.isArray(prevTasks)) return tasks.data;
 
+      setTasks((prevTasks) => {
         const isSame =
           prevTasks.length === tasks.data.length &&
           prevTasks.every(
@@ -50,7 +52,12 @@ const TodoListPage: React.FC = () => {
 
         return isSame ? prevTasks : tasks.data;
       });
-      setCountTasks(tasks.info);
+
+      setCountTasks((prevCountTasks) => {
+        const isSame =
+          JSON.stringify(prevCountTasks) === JSON.stringify(tasks.info);
+        return isSame ? prevCountTasks : tasks.info;
+      });
     } catch (error: any) {
       setError({ message: error.message });
     } finally {
