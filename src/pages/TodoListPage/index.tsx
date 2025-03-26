@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import AddTask from "../../Components/AddTask";
 import TaskContainer from "../../Components/TaskContainer";
@@ -22,6 +22,7 @@ const TodoListPage: React.FC = () => {
     completed: 0,
   });
   const [numberTimer, setNumberTimer] = useState(1);
+
   useEffect(() => {
     // таймер пересоздаётся каждый раз когда обновляется numberTimer
     const id = setInterval(() => setNumberTimer(numberTimer + 1), 5000);
@@ -29,27 +30,33 @@ const TodoListPage: React.FC = () => {
     return () => {
       clearInterval(id);
     };
-  }, [numberTimer]);
-
-  useEffect(() => {
-    fetchTasks();
-  }, [selectedTasks]);
+  }, [selectedTasks, numberTimer]);
   const handleSelectTasks = (selectedButton: TodoStatus) => {
     setSelectedTasks(selectedButton);
   };
 
-  const fetchTasks: () => Promise<void> = async () => {
+  const fetchTasks = useCallback(async () => {
     try {
       setIsLoading(true);
       const tasks = await getTasks(selectedTasks);
-      setTasks(tasks.data);
+      setTasks((prevTasks) => {
+        if (!Array.isArray(prevTasks)) return tasks.data;
+
+        const isSame =
+          prevTasks.length === tasks.data.length &&
+          prevTasks.every(
+            (task, i) => JSON.stringify(task) === JSON.stringify(tasks.data[i])
+          );
+
+        return isSame ? prevTasks : tasks.data;
+      });
       setCountTasks(tasks.info);
     } catch (error: any) {
       setError({ message: error.message });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [Tasks, selectedTasks]);
   if (error) {
     alert("Произошла ошибка. Попробуйте перезагрузить страницу!");
   }

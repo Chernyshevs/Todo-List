@@ -1,10 +1,11 @@
+import { memo } from "react";
 import { Todo } from "../../types/todoTypes";
 import TaskCard from "../TaskCard";
 
 const TaskContainer: React.FC<{
   fetchTasks: () => Promise<void>;
   Tasks: Todo[];
-}> = ({ fetchTasks, Tasks }) => {
+}> = memo(({ fetchTasks, Tasks }) => {
   return (
     <section id="task-container">
       {Tasks.length === 0 && <p>Задач нет</p>}
@@ -27,5 +28,5 @@ const TaskContainer: React.FC<{
       </ul>
     </section>
   );
-};
+});
 export default TaskContainer;

@@ -8,7 +8,11 @@ const Api = axios.create({
 
 export const getTasks = async (tasksStatus: string) => {
   try {
-    const response = await Api.get(`todos?filter=${tasksStatus}`);
+    const response = await Api.get(`/todos`, {
+      params: {
+        filter: tasksStatus
+      }
+    });
     return response.data;
   } catch (error) {
     console.error("Ошибка при получении задач:", error);
@@ -18,7 +22,7 @@ export const getTasks = async (tasksStatus: string) => {
 
 export const editTask = async (id: number, changedData: TodoRequest) => {
   try {
-    await Api.put(`todos/${id}`, changedData);
+    await Api.put(`/todos/${id}`, changedData)
   } catch (error) {
     console.error("Ошибка при редактировании задачи:", error);
     throw error;
@@ -36,7 +40,7 @@ export const deleteTask = async (id: number) => {
 
 export const addTask = async (todoData: TodoRequest) => {
   try {
-    await Api.post("todos", todoData);
+    await Api.post("/todos", todoData);
   } catch (error) {
     console.error("Ошибка при добавлении задачи:", error);
     throw error;
