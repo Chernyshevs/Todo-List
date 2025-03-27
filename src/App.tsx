@@ -1,18 +1,24 @@
 import "@ant-design/v5-patch-for-react-19";
 import TodoListPage from "./pages/TodoListPage";
 import AuthPage from "./pages/AuthPage";
-import SidePanel from "./Components/SidePanel";
-import { Routes, Route } from "react-router-dom";
+import RootPage from "./pages/RootPage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootPage />,
+    children: [
+      { path: "/", element: <TodoListPage /> },
+      { path: "/profile", element: <AuthPage /> },
+    ],
+  },
+]);
 
 function App() {
   return (
     <>
-        <Routes>
-          <Route path="/" element={<TodoListPage />} />
-          <Route path="/todos" element={<TodoListPage />} />
-          <Route path="/profile" element={<AuthPage />} />
-        </Routes>
-      <SidePanel />
+      <RouterProvider router={router} />
     </>
   );
 }

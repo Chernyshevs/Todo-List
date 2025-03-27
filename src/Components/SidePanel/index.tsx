@@ -10,7 +10,7 @@ const items: MenuItem[] = [
   {
     key: "1",
     icon: <ProfileOutlined />,
-    label: <Link to={"/todos"}>Список задач</Link>,
+    label: <Link to={"/"}>Список задач</Link>,
   },
   {
     key: "2",
