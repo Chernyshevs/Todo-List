@@ -54,7 +54,7 @@ const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = memo(
             <Input placeholder="Название задачи" size="large" />
           </Form.Item>
 
-          <Form.Item label={null}>
+          <Form.Item>
             <Button type="primary" htmlType="submit" size="large">
               Добавить
             </Button>
