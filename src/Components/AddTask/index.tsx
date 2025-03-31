@@ -1,59 +1,67 @@
-import "./AddTask.css";
-
-import { useState } from "react";
 import { addTask } from "../../api/https";
-
+import { Form, Input, Button } from "antd";
+import type { FormProps } from "antd";
+import type { FieldNameTask } from "../../types/todoTypes";
 import { MIN_TAKS_LENGTH, MAX_TAKS_LENGTH } from "../../constants/todos";
+import { memo } from "react";
+const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = memo(
+  ({ fetchTasks }) => {
+    const [form] = Form.useForm();
+    const handleAddTask: FormProps<FieldNameTask>["onFinish"] = async (
+      values
+    ) => {
+      try {
+        await addTask({ title: values.taskname?.trim(), isDone: false });
+        await fetchTasks();
+      } catch (error: any) {
+        alert(`Ошибка: ${error.message}`);
+      } finally {
+        form.resetFields();
+      }
+    };
+    const onFinishFailed: FormProps<FieldNameTask>["onFinishFailed"] = (
+      errorInfo
+    ) => {
+      console.log("Failed:", errorInfo);
+    };
 
-const AddTask: React.FC<{ fetchTasks: () => Promise<void> }> = ({
-  fetchTasks,
-}) => {
-  const [newTask, setNewTask] = useState<string>("");
+    return (
+      <section>
+        <Form
+          name="basic"
+          layout="inline"
+          style={{ justifyContent: "center" }}
+          onFinish={handleAddTask}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+          form={form}
+        >
+          <Form.Item<FieldNameTask>
+            style={{ width: "55%" }}
+            name="taskname"
+            rules={[
+              { required: true, message: "Пожалуйста введите имя задачи!" },
+              {
+                min: MIN_TAKS_LENGTH,
+                message: `Имя задачи должно быть минимум ${MIN_TAKS_LENGTH} символа`,
+              },
+              {
+                max: MAX_TAKS_LENGTH,
+                message: `Имя задачи должно быть максимум ${MAX_TAKS_LENGTH} символов`,
+              },
+            ]}
+          >
+            <Input placeholder="Название задачи" size="large" />
+          </Form.Item>
 
-  const handleChange = (changedText: string) => {
-    setNewTask(changedText);
-  };
-
-  const handleToggleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (
-      !(newTask.length >= MIN_TAKS_LENGTH && newTask.length <= MAX_TAKS_LENGTH)
-    ) {
-      return;
-    }
-    try {
-      await addTask({ title: newTask, isDone: false });
-      await fetchTasks();
-    } catch (error: any) {
-      alert(`Ошибка: ${error.message}`);
-    } finally {
-      setNewTask("");
-    }
-  };
-
-  return (
-    <section>
-      <form className="add-task" onSubmit={handleToggleSubmit}>
-        <input
-          required
-          value={newTask}
-          type="text"
-          placeholder="Новая задача..."
-          onChange={(event) => handleChange(event.target.value)}
-        />
-        <button>Добавить</button>
-        {newTask && newTask.length < MIN_TAKS_LENGTH && (
-          <p className="warning">
-            Название задачи должно содержать минимум 2 символа
-          </p>
-        )}
-        {newTask && newTask.length > MAX_TAKS_LENGTH && (
-          <p className="warning">
-            Название задачи должно содержать максимум 64 символа
-          </p>
-        )}
-      </form>
-    </section>
-  );
-};
+          <Form.Item>
+            <Button type="primary" htmlType="submit" size="large">
+              Добавить
+            </Button>
+          </Form.Item>
+        </Form>
+      </section>
+    );
+  }
+);
 export default AddTask;

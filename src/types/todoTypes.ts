@@ -1,3 +1,5 @@
+import type { MenuProps } from 'antd';
+
 export interface TodoRequest {
   title?: string;
   isDone?: boolean; // изменение статуса задачи происходит через этот флаг
@@ -18,4 +20,7 @@ export interface TodoInfo {
   inWork: number;
 }
 
+export type FieldNameTask = {taskname?: string};
+
+export type MenuStatuses = Required<MenuProps>['items'][number];
 export type TodoStatus = "all" | "inWork" | "completed"

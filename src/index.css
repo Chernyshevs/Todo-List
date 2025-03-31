@@ -49,7 +49,7 @@ input:focus {
 
 #todo-list-board {
   background-color: #d2e5f5;
-  max-width: 27rem;
+  max-width: 30rem;
   margin: 0 auto;
   border-radius: 15px;
   padding: 1.5rem;
@@ -59,4 +59,14 @@ input:focus {
   color: white;
   text-align: center;
   font-size: 1.5rem;
+}
+
+@media(max-width: 30rem) {
+  #todo-list-board {
+    background-color: #d2e5f5;
+    max-width: 20rem;
+    margin: 0 auto;
+    border-radius: 15px;
+    padding: 1.5rem;
+  }
 }

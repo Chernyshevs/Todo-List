@@ -1,17 +1,19 @@
-const API_URL = "https://easydev.club/api/v1";
-const ERROR_TEXT = "Произошла ошибка, попробуйте обновить страницу.";
+import axios from "axios";
 
 import { TodoRequest } from "../types/todoTypes";
 
+const Api = axios.create({
+  baseURL: `https://easydev.club/api/v1`,
+});
+
 export const getTasks = async (tasksStatus: string) => {
   try {
-    const response = await fetch(`${API_URL}/todos?filter=${tasksStatus}`, {
-      method: "GET",
+    const response = await Api.get(`/todos`, {
+      params: {
+        filter: tasksStatus
+      }
     });
-    if (!response.ok) {
-      throw new Error(ERROR_TEXT);
-    }
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error("Ошибка при получении задач:", error);
     throw error;
@@ -20,16 +22,7 @@ export const getTasks = async (tasksStatus: string) => {
 
 export const editTask = async (id: number, changedData: TodoRequest) => {
   try {
-    const response = await fetch(`${API_URL}/todos/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(changedData),
-    });
-    if (!response.ok) {
-      throw new Error(ERROR_TEXT);
-    }
+    await Api.put(`/todos/${id}`, changedData)
   } catch (error) {
     console.error("Ошибка при редактировании задачи:", error);
     throw error;
@@ -38,12 +31,7 @@ export const editTask = async (id: number, changedData: TodoRequest) => {
 
 export const deleteTask = async (id: number) => {
   try {
-    const response = await fetch(`${API_URL}/todos/${id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) {
-      throw new Error(ERROR_TEXT);
-    }
+    await Api.delete(`todos/${id}`);
   } catch (error) {
     console.error("Ошибка при удалении задачи:", error);
     throw error;
@@ -52,16 +40,7 @@ export const deleteTask = async (id: number) => {
 
 export const addTask = async (todoData: TodoRequest) => {
   try {
-    const response = await fetch(`${API_URL}/todos`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(todoData),
-    });
-    if (!response.ok) {
-      throw new Error(ERROR_TEXT);
-    }
+    await Api.post("/todos", todoData);
   } catch (error) {
     console.error("Ошибка при добавлении задачи:", error);
     throw error;

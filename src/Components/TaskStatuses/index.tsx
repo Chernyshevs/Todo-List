@@ -1,38 +1,41 @@
 import "./TaskStatuses.css";
 import { TodoInfo, TodoStatus } from "../../types/todoTypes";
+import { Menu } from "antd";
+import { MenuProps } from "antd";
+import { MenuStatuses } from "../../types/todoTypes";
+import { memo } from "react";
 
 const TaskStatuses: React.FC<{
   onSelect: (selectedButton: TodoStatus) => void;
   selectedTasks: TodoStatus;
-  countTasks: TodoInfo
-}> = ({ onSelect, selectedTasks, countTasks }) => {
+  countTasks: TodoInfo;
+}> = memo (({ onSelect, selectedTasks, countTasks }) => {
+  const items: MenuStatuses[] = [
+    {
+      label: `Все(${countTasks.all})`,
+      key: "all",
+    },
+
+    {
+      label: `В работе(${countTasks.inWork})`,
+      key: "inWork",
+    },
+    {
+      label: `Сделано(${countTasks.completed})`,
+      key: "completed",
+    },
+  ];
+  const onClick: MenuProps["onClick"] = (e) => {
+    onSelect(e.key as TodoStatus);
+  };
   return (
-    <menu className="task-statuses">
-      <li>
-        <button
-          onClick={() => onSelect("all")}
-          className={selectedTasks === "all" ? "active" : ""}
-        >
-          Все ({countTasks.all})
-        </button>
-      </li>
-      <li>
-        <button
-          onClick={() => onSelect("inWork")}
-          className={selectedTasks === "inWork" ? "active" : ""}
-        >
-          В работе ({countTasks.inWork})
-        </button>
-      </li>
-      <li>
-        <button
-          onClick={() => onSelect("completed")}
-          className={selectedTasks === "completed" ? "active" : ""}
-        >
-          Сделано ({countTasks.completed})
-        </button>
-      </li>
-    </menu>
+    <Menu
+      onClick={onClick}
+      selectedKeys={[selectedTasks]}
+      mode="horizontal"
+      items={items}
+      style={{ backgroundColor: "inherit", justifyContent: "center" }}
+    />
   );
-};
+});
 export default TaskStatuses;
