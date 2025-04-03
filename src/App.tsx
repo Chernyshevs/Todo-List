@@ -1,16 +1,28 @@
 import "@ant-design/v5-patch-for-react-19";
 import TodoListPage from "./pages/TodoListPage";
-import AuthPage from "./pages/AuthPage";
-import RootPage from "./pages/RootPage";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ProfilePage from "./pages/ProfilePage";
+import RootAppPage from "./pages/RootAppPage";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import AuthRootPage from "./pages/AuthRootPage";
+import RegistrationPage from "./pages/RegistrationPage";
+import LoginPage from "./pages/LoginPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootPage />,
+    element: <RootAppPage />,
     children: [
-      { path: "/", element: <TodoListPage /> },
-      { path: "/profile", element: <AuthPage /> },
+      { path: "todos", element: <TodoListPage /> },
+      { path: "profile", element: <ProfilePage /> },
+    ],
+  },
+  {
+    path: "/auth",
+    element: <AuthRootPage />,
+    children: [
+      { index: true, element: <Navigate to="/auth/login" replace /> },
+      { path: "login", element: <LoginPage /> },
+      { path: "registration", element: <RegistrationPage /> },
     ],
   },
 ]);

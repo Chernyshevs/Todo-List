@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+
+.auth-all-content {
+  width: 100%;
+  color: #525252;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+.auth-main-content {
+  height: 95%;
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 420px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.auth-design-img {
+  width: 72px;
+  margin-bottom: 36px;
+}
+
+.auth-title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 36px;
+}
+
+.auth-footer {
+  text-align: center;
+}
+
+.auth-footer a {
+  text-decoration: none;
+  color: #7f265b;
+}
