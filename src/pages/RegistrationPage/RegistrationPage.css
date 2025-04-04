@@ -1,16 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
 
-.auth-all-content {
+.reg-all-content {
   width: 100%;
   color: #525252;
   font-family: "Nunito Sans", sans-serif;
 }
 
-.auth-main-content {
+.reg-main-content {
   height: 95%;
 }
 
-.auth-container {
+.reg-container {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -19,23 +19,31 @@
   margin: 0 auto;
 }
 
-.auth-design-img {
+.reg-design-img {
   width: 72px;
   margin-bottom: 36px;
 }
 
-.auth-title {
+.reg-title {
   display: flex;
   flex-direction: column;
   gap: 3px;
   margin-bottom: 36px;
 }
 
-.auth-footer {
+.reg-footer {
   text-align: center;
 }
 
-.auth-footer a {
+.reg-footer a {
   text-decoration: none;
   color: #7f265b;
+}
+.reg-input {
+  width: 420px;
+  height: 45px;
+}
+
+.reg-form-btn {
+  width: 420px;
 }
