@@ -4,27 +4,30 @@ import { Navigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 
 import illustationAuth from "../../assets/illustrationAuth.png";
+import { useSelector } from "react-redux";
 
-const isAuth = false;
+import type { RootState } from "../../store";
 
 const AuthRootPage: React.FC = () => {
-  if (isAuth) {
+  const authStore = useSelector((state: RootState) => state.auth);
+
+  if (!authStore.isAuth) {
+    return (
+      <>
+        <div className="auth-wrapper">
+          <img
+            src={illustationAuth}
+            alt="Иллюстрация авторизации"
+            className="auth-image"
+          />
+
+          <Outlet />
+        </div>
+      </>
+    );
+  } else {
     return <Navigate to="/todos" replace />;
   }
-
-  return (
-    <>
-      <div className="auth-wrapper">
-        <img
-          src={illustationAuth}
-          alt="Иллюстрация авторизации"
-          className="auth-image"
-        />
-
-        <Outlet />
-      </div>
-    </>
-  );
 };
 
 export default AuthRootPage;

@@ -1,7 +1,7 @@
 import { Checkbox } from "antd";
 import type { CheckboxProps } from "antd";
 
-import { editTask } from "../../api/https";
+import { editTask } from "../../api/todos";
 import { Todo } from "../../types/todoTypes";
 const TodoStatusSwitching: React.FC<{
   task: Todo;

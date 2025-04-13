@@ -4,7 +4,7 @@ import AddTask from "../../Components/AddTask";
 import TaskContainer from "../../Components/TaskContainer";
 import TaskStatuses from "../../Components/TaskStatuses";
 import { TodoInfo, Todo, TodoStatus } from "../../types/todoTypes";
-import { getTasks } from "../../api/https";
+import { getTasks } from "../../api/todos";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 const TodoListPage: React.FC = () => {

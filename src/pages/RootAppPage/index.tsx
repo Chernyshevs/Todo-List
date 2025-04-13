@@ -1,17 +1,26 @@
 import { Navigate, Outlet } from "react-router-dom";
 import SidePanel from "../../Components/SidePanel";
-const isAuth = false;
+
+import type { RootState } from "../../store";
+import { useSelector } from "react-redux";
+
 const RootAppPage: React.FC = () => {
-  if (!isAuth) {
-    return <Navigate to="/auth/login" />;
+  const authStore = useSelector((state: RootState) => state.auth);
+
+  if (authStore.isAuthInProgress) {
+    return <p>Проверка авторизации</p>;
   }
 
-  return (
-    <>
-      <SidePanel />
-      <Outlet />
-    </>
-  );
+  if (authStore.isAuth) {
+    return (
+      <>
+        <SidePanel />
+        <Outlet />
+      </>
+    );
+  } else {
+    return <Navigate to="/auth/login" />;
+  }
 };
 
 export default RootAppPage;

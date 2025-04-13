@@ -1,9 +1,6 @@
-body {
-  background-color: white;
-}
-
 .auth-wrapper {
   display: flex;
+  background-color: white;
 }
 
 .auth-image {
