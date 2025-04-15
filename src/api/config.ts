@@ -1,13 +1,12 @@
 import axios from "axios";
+import { tokenManager } from "../helpers/token-manager";
 
 export const instance = axios.create({
   withCredentials: true,
   baseURL: "https://easydev.club/api/v1",
 });
 instance.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${localStorage.getItem(
-    "access-token"
-  )}`;
+  config.headers.Authorization = `Bearer ${tokenManager.accessToken}`;
   return config;
 });
 
@@ -36,14 +35,14 @@ instance.interceptors.response.use(
         const resp = await instance.post("/auth/refresh", {
           refreshToken: prevRefreshToken,
         });
-        localStorage.setItem("access-token", resp.data.accessToken);
-        localStorage.setItem("refresh-token", resp.data.refreshToken);
+        tokenManager.accessToken = resp.data.accessToken;
+        tokenManager.refreshToken = resp.data.refreshToken;
         return instance.request(originalRequest);
       } catch (error) {
         console.error("Ошибка обновления токена:", error);
 
-        localStorage.removeItem("access-token");
-        localStorage.removeItem("refresh-token");
+        tokenManager.accessToken = "";
+        tokenManager.refreshToken = "";
 
         window.location.href = "/auth/login";
 

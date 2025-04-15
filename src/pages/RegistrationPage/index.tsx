@@ -229,11 +229,14 @@ const RegistrationPage: React.FC = () => {
                   </Form.Item>
 
                   <Form.Item<UserRegistration>
-                    label="Мобильный телефон"
+                    label="Мобильный телефон (необязательно)"
                     name="phoneNumber"
                     rules={[
                       {
                         validator(_, value) {
+                          if (!value) {
+                            return Promise.resolve(); // поле не обязательно
+                          }
                           return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(
                             value
                           )
