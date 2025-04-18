@@ -1,4 +1,7 @@
 import "./RegistrationPage.css";
+
+import { useState } from "react";
+
 import authDesignElement from "../../assets/auth-element.png";
 import {
   Button,
@@ -7,7 +10,9 @@ import {
   notification,
   ConfigProvider,
   FormProps,
+  Spin,
 } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { register } from "../../api/auth";
 import { authValidation } from "../../constants/auth";
@@ -15,6 +20,7 @@ import { authValidation } from "../../constants/auth";
 import type { UserRegistration } from "../../types/authTypes";
 
 const RegistrationPage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
 
   const openNotification = (type: "success" | "error") => {
@@ -32,20 +38,20 @@ const RegistrationPage: React.FC = () => {
     }
   };
 
-  const onSubmitRegistration: FormProps<UserRegistration>["onFinish"] = async (
-    values
+  const onSubmitRegistration: FormProps["onFinish"] = async (
+    values: UserRegistration
   ) => {
-    delete values["passwordTwo"];
     try {
+      setIsLoading(true);
       await register(values);
       openNotification("success");
     } catch {
       openNotification("error");
+    } finally {
+      setIsLoading(false);
     }
   };
-  const onFinishFailed: FormProps<UserRegistration>["onFinishFailed"] = (
-    errorInfo
-  ) => {
+  const onFinishFailed: FormProps["onFinishFailed"] = (errorInfo) => {
     console.log("Failed:", errorInfo);
     openNotification("error");
   };
@@ -172,9 +178,10 @@ const RegistrationPage: React.FC = () => {
                       size="large"
                       className="reg-input"
                       placeholder="*****************"
+                      autoComplete="off"
                     />
                   </Form.Item>
-                  <Form.Item<UserRegistration>
+                  <Form.Item<string>
                     label="Повторите пароль"
                     name="passwordTwo"
                     rules={[
@@ -204,6 +211,7 @@ const RegistrationPage: React.FC = () => {
                       size="large"
                       className="reg-input"
                       placeholder="*****************"
+                      autoComplete="off"
                     />
                   </Form.Item>
 
@@ -270,6 +278,11 @@ const RegistrationPage: React.FC = () => {
               </ConfigProvider>
             </div>
           </div>
+          <Spin
+            indicator={<LoadingOutlined spin />}
+            size="large"
+            style={!isLoading ? { opacity: `0` } : {}}
+          />
         </main>
         <footer className="reg-footer">
           {" "}

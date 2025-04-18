@@ -31,9 +31,8 @@ instance.interceptors.response.use(
       !error.config._isRetry
     ) {
       try {
-        const prevRefreshToken = localStorage.getItem("refresh-token");
         const resp = await instance.post("/auth/refresh", {
-          refreshToken: prevRefreshToken,
+          refreshToken: tokenManager.refreshToken,
         });
         tokenManager.accessToken = resp.data.accessToken;
         tokenManager.refreshToken = resp.data.refreshToken;

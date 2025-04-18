@@ -24,5 +24,4 @@ export const getUserData = async () => {
   } catch (error) {
     console.log("Ошибка при получении данных пользователя", error);
   }
-  return instance.get("/user/profile");
 };

@@ -6,17 +6,11 @@ const authSlice = createSlice({
   name: "auth",
   initialState: initialAuthState,
   reducers: {
-    authStart(state) {
-      state.isAuthInProgress = true;
-    },
     login(state) {
       state.isAuth = true;
     },
     logout(state) {
       state.isAuth = false;
-    },
-    authEnd(state) {
-      state.isAuthInProgress = false;
     },
   },
 });

@@ -25,7 +25,6 @@ export const loginUser = createAsyncThunk<
 
 export const checkAuth = () => {
   return async (dispatch: AppDispatch) => {
-    dispatch(authActions.authStart());
     try {
       const prevRefreshToken = localStorage.getItem("refresh-token");
       if (!prevRefreshToken) {
@@ -37,19 +36,14 @@ export const checkAuth = () => {
       dispatch(authActions.login());
     } catch (error) {
       console.log("login error");
-    } finally {
-      dispatch(authActions.authEnd());
     }
   };
 };
 
 export const logoutUser = () => {
   return async (dispatch: AppDispatch) => {
-    dispatch(authActions.authStart());
-
     tokenManager.accessToken = "";
     tokenManager.refreshToken = "";
     dispatch(authActions.logout());
-    dispatch(authActions.authEnd());
   };
 };

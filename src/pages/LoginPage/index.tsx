@@ -1,6 +1,9 @@
 import "./LoginPage.css";
 
 import authDesignElement from "../../assets/auth-element.png";
+
+import { useState } from "react";
+
 import {
   Button,
   Form,
@@ -13,18 +16,16 @@ import {
 import { LoadingOutlined } from "@ant-design/icons";
 import { authValidation } from "../../constants/auth";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loginUser } from "../../store/auth-actions";
 
 import type { AuthData } from "../../types/authTypes";
-import type { AppDispatch, RootState } from "../../store";
+import type { AppDispatch } from "../../store";
 import { authActions } from "../../store/auth-slice";
 
 const LoginPage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
-  const isLoading = useSelector(
-    (state: RootState) => state.auth.isAuthInProgress
-  );
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -34,18 +35,18 @@ const LoginPage: React.FC = () => {
       description: "Проверьте, правильно ли введены логин/пароль.",
     });
   };
-  const onSubmitLogin: FormProps<AuthData>["onFinish"] = async (values) => {
+  const onSubmitLogin: FormProps["onFinish"] = async (values: AuthData) => {
     try {
-      dispatch(authActions.authStart());
+      setIsLoading(true);
       await dispatch(loginUser(values)).unwrap();
       dispatch(authActions.login());
     } catch {
       openNotificationError();
     } finally {
-      dispatch(authActions.authEnd());
+      setIsLoading(false);
     }
   };
-  const onFinishFailed: FormProps<AuthData>["onFinishFailed"] = () => {
+  const onFinishFailed: FormProps["onFinishFailed"] = () => {
     openNotificationError();
   };
 
@@ -153,11 +154,11 @@ const LoginPage: React.FC = () => {
                 </Form>
               </ConfigProvider>
             </div>
-          <Spin
-            indicator={<LoadingOutlined spin />}
-            size="large"
-            style={!isLoading ? { opacity: `0` } : {}}
-          />
+            <Spin
+              indicator={<LoadingOutlined spin />}
+              size="large"
+              style={!isLoading ? { opacity: `0` } : {}}
+            />
           </div>
         </main>
         <footer className="login-footer">
