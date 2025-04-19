@@ -9,6 +9,7 @@ html {
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
   min-height: 100vh;
+  background-color: #2f70af;
 }
 
 body,
@@ -18,7 +19,6 @@ p {
 }
 body {
   font-family: "Segoe UI";
-  background-color: #2f70af;
 }
 ul,
 ol,
@@ -61,7 +61,7 @@ input:focus {
   font-size: 1.5rem;
 }
 
-@media(max-width: 30rem) {
+@media (max-width: 30rem) {
   #todo-list-board {
     background-color: #d2e5f5;
     max-width: 20rem;

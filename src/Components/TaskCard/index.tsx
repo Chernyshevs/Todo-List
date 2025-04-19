@@ -2,7 +2,7 @@ import "./TaskCard.css";
 
 import { useState } from "react";
 
-import { editTask, deleteTask } from "../../api/https";
+import { editTask, deleteTask } from "../../api/todos";
 import { Todo } from "../../types/todoTypes";
 
 import { Button, Form, Input } from "antd";
