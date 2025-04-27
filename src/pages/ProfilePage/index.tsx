@@ -31,7 +31,6 @@ const ProfilePage: React.FC = () => {
 
   return (
     <>
-      <div className="profile-wrapper">
         <div className="profile">
           {userData && (
             <ul className="user-data">
@@ -55,7 +54,6 @@ const ProfilePage: React.FC = () => {
         <Button size="large" onClick={handleLogout}>
           Выйти
         </Button>
-      </div>
     </>
   );
 };

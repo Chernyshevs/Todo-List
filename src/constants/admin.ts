@@ -1,0 +1,1 @@
+export const PAGINATION_USER_LIMIT = 20

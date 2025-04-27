@@ -17,6 +17,8 @@ import { checkAuth } from "./store/auth-actions";
 import { useEffect } from "react";
 
 import type { AppDispatch } from "./store";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import UserAdminProfilePage from "./pages/UserAdminProfilePage";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -32,6 +34,8 @@ function App() {
         { index: true, element: <Navigate to="/todos" replace /> },
         { path: "todos", element: <TodoListPage /> },
         { path: "profile", element: <ProfilePage /> },
+        { path: "admin", element: <AdminPage /> },
+        { path: "admin/:userId", element: <UserAdminProfilePage /> },
       ],
     },
     {

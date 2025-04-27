@@ -138,6 +138,7 @@ const LoginPage: React.FC = () => {
                       size="large"
                       className="login-input"
                       placeholder="*****************"
+                      autoComplete="off"
                     />
                   </Form.Item>
 

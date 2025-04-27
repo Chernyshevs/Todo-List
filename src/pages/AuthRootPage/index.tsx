@@ -26,7 +26,7 @@ const AuthRootPage: React.FC = () => {
       </>
     );
   } else {
-    return <Navigate to="/todos" replace />;
+    return <Navigate to="/" replace />;
   }
 };
 
