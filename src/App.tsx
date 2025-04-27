@@ -17,7 +17,7 @@ import { checkAuth } from "./store/auth-actions";
 import { useEffect } from "react";
 
 import type { AppDispatch } from "./store";
-import AdminPage from "./pages/AdminPage/AdminPage";
+import AdminPage from "./pages/AdminPage";
 import UserAdminProfilePage from "./pages/UserAdminProfilePage";
 
 function App() {

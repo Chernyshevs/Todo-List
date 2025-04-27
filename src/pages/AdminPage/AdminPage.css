@@ -8,23 +8,3 @@
   gap: 1rem;
 }
 
-.admin-filters {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: start;
-}
-
-.filter-form-admin {
-  display: flex;
-  min-width: 660px;
-  gap: 1rem;
-  margin: 1rem 0 0 1rem;
-}
-.search-users {
-  margin: 1rem;
-}
-
-.admin-table {
-  width: 100%;
-}

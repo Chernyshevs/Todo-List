@@ -1,0 +1,11 @@
+.admin-actions ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.admin-control-roles ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

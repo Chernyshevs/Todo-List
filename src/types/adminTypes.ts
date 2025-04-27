@@ -23,4 +23,9 @@ export interface UserRequest {
   phoneNumber?: string;
 }
 
+export interface UserRolesRequest {  
+  roles: Roles[]  
+}
+
+
 export type Roles = "ADMIN" | "MODERATOR" | "USER";
