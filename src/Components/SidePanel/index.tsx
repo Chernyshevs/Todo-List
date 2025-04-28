@@ -12,15 +12,19 @@ import {
 } from "@ant-design/icons";
 import { getUserData } from "../../api/auth";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { userProfileActions } from "../../store/user-profile-slice";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const SidePanel: React.FC = () => {
+  const dispatch = useDispatch();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       const userData = await getUserData();
+      dispatch(userProfileActions.setUserData(userData));
       if (
         userData.roles.includes("ADMIN") ||
         userData.roles.includes("MODERATOR")
@@ -50,11 +54,21 @@ const SidePanel: React.FC = () => {
     });
   }
 
+  const currentPath = window.location.pathname;
+
   return (
     <aside className="side-nav-panel">
       <Menu
         style={{ width: 215, backgroundColor: "inherit" }}
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={
+          currentPath === "/" || currentPath === "/todos"
+            ? ["1"]
+            : currentPath === "/profile"
+            ? ["2"]
+            : currentPath === "/admin"
+            ? ["3"]
+            : undefined
+        }
         defaultOpenKeys={["sub1"]}
         mode="inline"
         items={items}

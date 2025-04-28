@@ -11,21 +11,10 @@ import AuthRootPage from "./pages/AuthRootPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import LoginPage from "./pages/LoginPage";
 
-import { useDispatch } from "react-redux";
-import { checkAuth } from "./store/auth-actions";
-
-import { useEffect } from "react";
-
-import type { AppDispatch } from "./store";
 import AdminPage from "./pages/AdminPage";
 import UserAdminProfilePage from "./pages/UserAdminProfilePage";
 
 function App() {
-  const dispatch: AppDispatch = useDispatch();
-  useEffect(() => {
-    dispatch(checkAuth());
-  }, []);
-
   const router = createBrowserRouter([
     {
       path: "/",

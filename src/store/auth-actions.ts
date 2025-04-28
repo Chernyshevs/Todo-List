@@ -26,15 +26,17 @@ export const loginUser = createAsyncThunk<
 export const checkAuth = () => {
   return async (dispatch: AppDispatch) => {
     try {
-      const prevRefreshToken = localStorage.getItem("refresh-token");
-      if (!prevRefreshToken) {
+      if (!tokenManager.refreshToken) {
         throw new Error("login error");
       }
-      const response = await refreshToken({ refreshToken: prevRefreshToken });
+      const response = await refreshToken({
+        refreshToken: tokenManager.refreshToken,
+      });
       tokenManager.accessToken = response.data.accessToken;
       tokenManager.refreshToken = response.data.refreshToken;
       dispatch(authActions.login());
     } catch (error) {
+      window.location.href = "/auth/login";
       console.log("login error");
     }
   };
@@ -45,5 +47,6 @@ export const logoutUser = () => {
     tokenManager.accessToken = "";
     tokenManager.refreshToken = "";
     dispatch(authActions.logout());
+    window.location.href = "/auth/login";
   };
 };

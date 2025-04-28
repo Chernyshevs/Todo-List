@@ -1,18 +1,16 @@
 import "./RootAppPage.css";
 
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import SidePanel from "../../Components/SidePanel";
 
-import type { RootState } from "../../store";
+import type { AppDispatch, RootState } from "../../store";
 import { useSelector } from "react-redux";
-import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { checkAuth } from "../../store/auth-actions";
 
 const RootAppPage: React.FC = () => {
   const authStore = useSelector((state: RootState) => state.auth);
-  if (authStore.isAuthInProgress) {
-    return <Spin indicator={<LoadingOutlined spin />} size="large" />;
-  }
+  const dispatch: AppDispatch = useDispatch();
   if (authStore.isAuth) {
     return (
       <div className="wrapper">
@@ -21,7 +19,8 @@ const RootAppPage: React.FC = () => {
       </div>
     );
   } else {
-    return <Navigate to="/auth/login" />;
+    console.log(123)
+    dispatch(checkAuth());
   }
 };
 
