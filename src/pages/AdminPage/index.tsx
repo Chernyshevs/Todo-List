@@ -89,7 +89,12 @@ const AdminPage: React.FC = () => {
   const onFinishFilter = (values: any) => {
     setSorterParams((prevSorterParams) => ({
       ...prevSorterParams,
+      offset: 0,
       isBlocked: values.filter === "all" ? undefined : values.filter,
+    }));
+    setPaginationParams((prevPagination) => ({
+      ...prevPagination,
+      current: 1,
     }));
   };
 
@@ -158,6 +163,7 @@ const AdminPage: React.FC = () => {
 
   const handleTableChange: TableProps<User>["onChange"] = (
     pagination,
+    _filters,
     sorter
   ) => {
     setPaginationParams(pagination);
@@ -167,7 +173,6 @@ const AdminPage: React.FC = () => {
         typeof pagination.current === "number"
           ? pagination.current - 1
           : undefined;
-
       const newSortBy = Array.isArray(sorter)
         ? undefined
         : typeof sorter.field === "string"
@@ -176,12 +181,10 @@ const AdminPage: React.FC = () => {
 
       const newSortOrder = Array.isArray(sorter)
         ? undefined
-        : typeof sorter.order === "string"
-        ? sorter.order === "ascend"
-          ? "asc"
-          : sorter.order === "descend"
-          ? "desc"
-          : undefined
+        : sorter.order === "ascend"
+        ? "asc"
+        : sorter.order === "descend"
+        ? "desc"
         : undefined;
 
       return {
@@ -191,6 +194,10 @@ const AdminPage: React.FC = () => {
         offset: newOffset,
       };
     });
+
+    if (pagination.pageSize !== paginationParams?.pageSize) {
+      setUsersData([]);
+    }
   };
 
   return (

@@ -15,13 +15,12 @@ const AdminActions: React.FC<{
   return (
     <div className="admin-actions">
       <ul>
-        
-          <li>
-            <Space size="middle">
-              <Link to={`${record.id}`}>Перейти к профилю</Link>
-            </Space>
-          </li>
-        
+        <li>
+          <Space size="middle">
+            <Link to={`${record.id}`}>Перейти к профилю</Link>
+          </Space>
+        </li>
+
         <li>
           {" "}
           <Popconfirm
@@ -44,18 +43,28 @@ const AdminActions: React.FC<{
                 <ul>
                   <li>
                     {!record.roles.includes("ADMIN") ? (
-                      <Button
-                        onClick={() =>
+                      <Popconfirm
+                        title="Назначить администратором"
+                        description={`Вы уверены что хотите назначить администратором пользователя ${record.username}?`}
+                        icon={<QuestionCircleOutlined />}
+                        cancelText="Нет"
+                        okText="Да"
+                        onConfirm={() =>
                           onUpdateRoles(`${record.id}`, {
                             roles: [...record.roles, "ADMIN"],
                           })
                         }
                       >
-                        Назначить администратором
-                      </Button>
+                        <Button>Назначить администратором</Button>
+                      </Popconfirm>
                     ) : (
-                      <Button
-                        onClick={() =>
+                      <Popconfirm
+                        title="Отобрать администратора"
+                        description={`Вы уверены что хотите отобрать администратора у пользователя ${record.username}?`}
+                        icon={<QuestionCircleOutlined />}
+                        cancelText="Нет"
+                        okText="Да"
+                        onConfirm={() =>
                           onUpdateRoles(`${record.id}`, {
                             roles: record.roles.filter(
                               (role) => role != "ADMIN"
@@ -63,25 +72,35 @@ const AdminActions: React.FC<{
                           })
                         }
                       >
-                        Отобрать администратора
-                      </Button>
+                        <Button>Отобрать администратора</Button>
+                      </Popconfirm>
                     )}
                   </li>
                   <li>
                     {" "}
                     {!record.roles.includes("MODERATOR") ? (
-                      <Button
-                        onClick={() =>
+                      <Popconfirm
+                        title="Назначить модератором"
+                        description={`Вы уверены что хотите назначить модератором пользователя ${record.username}?`}
+                        icon={<QuestionCircleOutlined />}
+                        cancelText="Нет"
+                        okText="Да"
+                        onConfirm={() =>
                           onUpdateRoles(`${record.id}`, {
                             roles: [...record.roles, "MODERATOR"],
                           })
                         }
                       >
-                        Назначить модератором
-                      </Button>
+                        <Button>Назначить модератором</Button>
+                      </Popconfirm>
                     ) : (
-                      <Button
-                        onClick={() =>
+                      <Popconfirm
+                        title="Отобрать модератора"
+                        description={`Вы уверены что хотите отобрать модератора у пользователя ${record.username}?`}
+                        icon={<QuestionCircleOutlined />}
+                        cancelText="Нет"
+                        okText="Да"
+                        onConfirm={() =>
                           onUpdateRoles(`${record.id}`, {
                             roles: record.roles.filter(
                               (role) => role != "MODERATOR"
@@ -89,8 +108,8 @@ const AdminActions: React.FC<{
                           })
                         }
                       >
-                        Отобрать модератора
-                      </Button>
+                        <Button>Отобрать модератора</Button>
+                      </Popconfirm>
                     )}
                   </li>
                 </ul>

@@ -1,4 +1,4 @@
-import "./UserAdminProfilePage.css"
+import "./UserAdminProfilePage.css";
 
 import { getUser, updateUserData } from "../../api/admin";
 import { User, UserRequest } from "../../types/adminTypes";
@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button, Input, Form, FormProps } from "antd";
 import { CloseOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
+import { authValidation } from "../../constants/auth";
 
 const UserAdminProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<User>();
@@ -44,8 +45,9 @@ const UserAdminProfilePage: React.FC = () => {
             ? { phoneNumber: values.phoneNumber }
             : {}),
         };
+        console.log(changedData);
         await updateUserData(params.userId, changedData);
-        form.setFieldsValue({ ...userData, ...changedData });
+        setUserData({ ...userData, ...changedData });
       } catch {
         alert("Не удалось обновить данные пользователя");
       } finally {
@@ -67,7 +69,7 @@ const UserAdminProfilePage: React.FC = () => {
               phoneNumber: userData.phoneNumber,
             }}
             disabled={isDisabledForm}
-            layout="inline"
+            layout="horizontal"
             onFinish={handleSubmit}
             autoComplete="off"
             id={`user-data-form`}
@@ -75,11 +77,29 @@ const UserAdminProfilePage: React.FC = () => {
           >
             <Form.Item
               style={{ width: "14rem" }}
+              label="Имя пользователя"
               name="username"
               rules={[
                 {
                   required: true,
-                  message: "Имя пользователя обязательно для заполнения",
+                  message: "Пожалуйста введите имя пользователя",
+                },
+                {
+                  min: authValidation.MIN_USERNAME_LENGTH,
+                  message: `Минимум ${authValidation.MIN_USERNAME_LENGTH} символов`,
+                },
+                {
+                  max: authValidation.MAX_USERNAME_LENGTH,
+                  message: `Максимум ${authValidation.MAX_USERNAME_LENGTH} символов`,
+                },
+                {
+                  validator(_, value) {
+                    return /^[a-zа-я\s]+$/i.test(value)
+                      ? Promise.resolve()
+                      : Promise.reject(
+                          new Error("Используйте латиницу или кириллицу!")
+                        );
+                  },
                 },
               ]}
             >
@@ -87,17 +107,40 @@ const UserAdminProfilePage: React.FC = () => {
             </Form.Item>
             <Form.Item
               style={{ width: "14rem" }}
+              label="Эл. Почта"
               name="email"
               rules={[
                 {
                   required: true,
-                  message: "Эл. Почта обязательна для заполнения",
+                  message: "Пожалуйста введите Email!",
+                },
+                {
+                  type: "email",
+                  message: "Email введён неверно!",
                 },
               ]}
             >
               <Input placeholder="Эл. Почта" size="large" />
             </Form.Item>
-            <Form.Item style={{ width: "14rem" }} name="phoneNumber">
+            <Form.Item
+              style={{ width: "14rem" }}
+              name="phoneNumber"
+              label="Номер телефона"
+              rules={[
+                {
+                  validator(_, value) {
+                    if (!value) {
+                      return Promise.resolve();
+                    }
+                    return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(
+                      value
+                    )
+                      ? Promise.resolve()
+                      : Promise.reject(new Error("Неверный формат телефона!"));
+                  },
+                },
+              ]}
+            >
               <Input placeholder="Номер телефона" size="large" />
             </Form.Item>
           </Form>
@@ -139,7 +182,9 @@ const UserAdminProfilePage: React.FC = () => {
         </div>
       )}
       <Button>
-        <Link to=".." relative="path">Вернуться</Link>
+        <Link to=".." relative="path">
+          Вернуться
+        </Link>
       </Button>
     </div>
   );

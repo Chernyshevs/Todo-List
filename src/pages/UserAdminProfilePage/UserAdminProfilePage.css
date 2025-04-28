@@ -19,12 +19,16 @@
   border-radius: 10px;
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.3);
   padding: 2rem;
-  width: 25%;
+  width: 50%;
 }
 .admin-user-data-form {
   display: flex;
   flex-direction: column;
   gap: 1em;
+}
+
+.admin-user-data-form input{
+  width: 250px;
 }
 
 .admin-user-actions {
