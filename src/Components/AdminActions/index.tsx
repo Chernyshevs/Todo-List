@@ -2,7 +2,7 @@ import "./AdminActions.css";
 
 import { useState } from "react";
 
-import { Space, Popconfirm, Button, Popover, Select } from "antd";
+import { Space, Popconfirm, Button, Select, Modal } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { User, UserRolesRequest } from "../../types/adminTypes";
@@ -16,17 +16,32 @@ const AdminActions: React.FC<{
   onUnBlockUser: (id: string) => Promise<void>;
   onUpdateRoles: (id: string, newRoles: UserRolesRequest) => Promise<void>;
 }> = ({ record, onDelete, onBlockUser, onUnBlockUser, onUpdateRoles }) => {
-  const [newRolesRequest, setNewRolesRequest] = useState<UserRolesRequest>({
-    roles: ["USER"],
+  const [roles, setRoles] = useState<UserRolesRequest>({
+    roles: [],
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChangeRole = (newRoles: UserRolesRequest) => {
-    setNewRolesRequest(newRoles);
+    setRoles(newRoles);
+  };
+  const showModal = (roles: UserRolesRequest) => {
+    setRoles(roles);
+    setIsModalOpen(true);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleUpdateRoles = (id: string, newRoles: UserRolesRequest) => {
+    onUpdateRoles(id, newRoles);
+    setIsModalOpen(false);
   };
 
   const rolesOptions: SelectProps["options"] = [
-    { label: "Администратор", value: "ADMIN" },
+    { label: "Пользователь", value: "USER" },
     { label: "Модератор", value: "MODERATOR" },
+    { label: "Администратор", value: "ADMIN" },
   ];
 
   return (
@@ -52,42 +67,33 @@ const AdminActions: React.FC<{
           </Popconfirm>
         </li>
         <li>
-          <Popover
-            placement="left"
-            title="Управление ролями"
-            content={
-              <div className="admin-control-roles">
-                <Select
-                  mode="multiple"
-                  allowClear
-                  style={{ width: "100%" }}
-                  placeholder="Выберите роль"
-                  defaultValue={record.roles.filter((role) => role != "USER")}
-                  onChange={(value) =>
-                    handleChangeRole({
-                      roles: ["USER", ...value],
-                    })
-                  }
-                  options={rolesOptions}
-                />
-                <Popconfirm
-                  title="Обновить роль"
-                  description={`Вы уверены что хотите обновить роли у ${record.username}?`}
-                  icon={<QuestionCircleOutlined />}
-                  cancelText="Нет"
-                  okText="Да"
-                  onConfirm={() =>
-                    onUpdateRoles(`${record.id}`, newRolesRequest)
-                  }
-                >
-                  <Button>Подтвердить</Button>
-                </Popconfirm>
-              </div>
-            }
-            trigger="click"
+          <Button onClick={() => showModal({ roles: record.roles })}>
+            Управление ролями
+          </Button>
+          <Modal
+            title="Обновить роли"
+            open={isModalOpen}
+            onOk={() => handleUpdateRoles(`${record.id}`, roles)}
+            onCancel={handleCancelModal}
+            okText="Подтвердить"
+            cancelText="Отменить"
           >
-            <Button>Управление ролями</Button>
-          </Popover>
+            <div className="admin-control-roles">
+              <Select
+                mode="multiple"
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Выберите роль"
+                value={roles.roles}
+                onChange={(value) =>
+                  handleChangeRole({
+                    roles: value,
+                  })
+                }
+                options={rolesOptions}
+              />
+            </div>
+          </Modal>
         </li>
         <li>
           {!record.isBlocked ? (
