@@ -8,7 +8,7 @@ import { Button, Input, Form, FormProps } from "antd";
 import { CloseOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { authValidation } from "../../constants/auth";
 
-const UserAdminProfilePage: React.FC = () => {
+const UserPage: React.FC = () => {
   const [userData, setUserData] = useState<User>();
   const [isDisabledForm, setIsDisabledForm] = useState<boolean>(true);
 
@@ -33,19 +33,23 @@ const UserAdminProfilePage: React.FC = () => {
     setIsDisabledForm(true);
   };
 
+  const getChangedFields = (original: UserRequest, updated: UserRequest) => {
+    const result: UserRequest = {};
+
+    for (const key in updated) {
+      const typedKey = key as keyof UserRequest;
+      if (updated[typedKey] !== original[typedKey]) {
+        result[typedKey] = updated[typedKey];
+      }
+    }
+
+    return result;
+  };
+
   const handleSubmit: FormProps["onFinish"] = async (values: UserRequest) => {
     if (params.userId && userData) {
       try {
-        const changedData: UserRequest = {
-          ...(values.username !== userData?.username
-            ? { username: values.username }
-            : {}),
-          ...(values.email !== userData?.email ? { email: values.email } : {}),
-          ...(values.phoneNumber !== userData?.phoneNumber
-            ? { phoneNumber: values.phoneNumber }
-            : {}),
-        };
-        console.log(changedData);
+        const changedData: UserRequest = getChangedFields(userData, values);
         await updateUserData(params.userId, changedData);
         setUserData({ ...userData, ...changedData });
       } catch {
@@ -145,44 +149,38 @@ const UserAdminProfilePage: React.FC = () => {
             </Form.Item>
           </Form>
           <div className="admin-user-actions">
-            <ul>
+            <div>
               {!isDisabledForm ? (
                 <>
                   {" "}
-                  <li>
-                    <Button
-                      icon={<SaveOutlined />}
-                      size="large"
-                      form="user-data-form"
-                      htmlType="submit"
-                    />
-                  </li>
-                  <li>
-                    <Button
-                      icon={<CloseOutlined />}
-                      size="large"
-                      onClick={handleEndEdit}
-                    />
-                  </li>
+                  <Button
+                    icon={<SaveOutlined />}
+                    size="large"
+                    form="user-data-form"
+                    htmlType="submit"
+                  />
+                  <Button
+                    icon={<CloseOutlined />}
+                    size="large"
+                    onClick={handleEndEdit}
+                  />
                 </>
               ) : (
                 <>
-                  <li>
-                    <Button
-                      icon={<EditOutlined />}
-                      size="large"
-                      onClick={handleStartEdit}
-                      htmlType="button"
-                    />
-                  </li>
+                  <Button
+                    icon={<EditOutlined />}
+                    size="large"
+                    onClick={handleStartEdit}
+                    htmlType="button"
+                  />
                 </>
               )}
-            </ul>
+            </div>
           </div>
         </div>
       )}
       <Button>
-        <Link to=".." relative="path">
+        <Link to="/admin" relative="path">
           Вернуться
         </Link>
       </Button>
@@ -190,4 +188,4 @@ const UserAdminProfilePage: React.FC = () => {
   );
 };
 
-export default UserAdminProfilePage;
+export default UserPage;

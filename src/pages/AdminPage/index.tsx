@@ -2,7 +2,7 @@ import "./AdminPage.css";
 
 import { useState, useEffect } from "react";
 import AdminTable from "../../Components/AdminTable";
-import { Input } from "antd";
+import { notification } from "antd";
 import {
   blockUser,
   deleteUser,
@@ -18,15 +18,13 @@ import type {
   UserFilters,
   UserRolesRequest,
 } from "../../types/adminTypes";
-import type { GetProp, TableProps, GetProps } from "antd";
+import type { GetProp, TableProps } from "antd";
 import AdminFilters from "../../Components/AdminFilters";
 
 type TablePaginationConfig = Exclude<
   GetProp<TableProps, "pagination">,
   boolean
 >;
-
-type SearchProps = GetProps<typeof Input.Search>;
 
 const AdminPage: React.FC = () => {
   const [usersData, setUsersData] = useState<User[]>([]);
@@ -44,7 +42,7 @@ const AdminPage: React.FC = () => {
       pageSize: 20,
       showSizeChanger: false,
     });
-
+  const [api, contextHolder] = notification.useNotification();
   useEffect(() => {
     const fetchUsersData = async () => {
       try {
@@ -86,6 +84,12 @@ const AdminPage: React.FC = () => {
     fetchUsersData();
   }, [paginationParams?.current, paginationParams?.pageSize, sorterParams]);
 
+  const openErrorNotification = (message: string) => {
+    api["error"]({
+      message: message,
+    });
+  };
+
   const onFinishFilter = (values: any) => {
     setSorterParams((prevSorterParams) => ({
       ...prevSorterParams,
@@ -98,66 +102,45 @@ const AdminPage: React.FC = () => {
     }));
   };
 
-  const onSearch: SearchProps["onSearch"] = (value) =>
+  const onSearch: React.ChangeEventHandler<HTMLInputElement> = (event) =>
     setSorterParams((prevSorterParams) => ({
       ...prevSorterParams,
-      search: value,
+      search: event.target.value,
     }));
 
   const handleDeleteUser = async (id: string) => {
     try {
       await deleteUser(id);
-      setUsersData((prevData) => prevData.filter((item) => item.id !== +id));
+      setSorterParams((prevParams) => ({ ...prevParams }));
     } catch {
-      alert("Не удалось удалить пользователя.");
+      openErrorNotification("Не удалось удалить пользователя.");
     }
   };
 
   const handleBlockUser = async (id: string) => {
     try {
       await blockUser(id);
-      setUsersData((prevData) =>
-        prevData.map((user) => {
-          if (user.id === +id) {
-            user.isBlocked = true;
-          }
-          return user;
-        })
-      );
+      setSorterParams((prevParams) => ({ ...prevParams }));
     } catch (error) {
-      alert("Не удалось заблокировать пользователя");
+      openErrorNotification("Не удалось заблокировать пользователя");
     }
   };
 
   const handleUnBlockUser = async (id: string) => {
     try {
       await unBlockUser(id);
-      setUsersData((prevData) =>
-        prevData.map((user) => {
-          if (user.id === +id) {
-            user.isBlocked = false;
-          }
-          return user;
-        })
-      );
+      setSorterParams((prevParams) => ({ ...prevParams }));
     } catch (error) {
-      alert("Не удалось разблокировать пользователя");
+      openErrorNotification("Не удалось разблокировать пользователя");
     }
   };
 
   const handleUpdateRole = async (id: string, newRoles: UserRolesRequest) => {
     try {
       await updateRolesUser(id, newRoles);
-      setUsersData((prevData) =>
-        prevData.map((user) => {
-          if (user.id === +id) {
-            user.roles = newRoles.roles;
-          }
-          return user;
-        })
-      );
+      setSorterParams((prevParams) => ({ ...prevParams }));
     } catch (error) {
-      alert("Не удалось обновить роли пользователя");
+      openErrorNotification("Не удалось обновить роли пользователя");
     }
   };
 
@@ -202,9 +185,10 @@ const AdminPage: React.FC = () => {
 
   return (
     <>
+      {contextHolder}
       <div className="admin-panel">
         <>
-          <AdminFilters onSearch={onSearch} onFinishFilter={onFinishFilter} />
+          <AdminFilters onChange={onSearch} onFinishFilter={onFinishFilter} />
           <AdminTable
             sorterParams={sorterParams}
             usersData={usersData}

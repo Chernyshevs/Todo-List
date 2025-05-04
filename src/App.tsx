@@ -12,19 +12,24 @@ import RegistrationPage from "./pages/RegistrationPage";
 import LoginPage from "./pages/LoginPage";
 
 import AdminPage from "./pages/AdminPage";
-import UserAdminProfilePage from "./pages/UserAdminProfilePage";
+import UserPage from "./pages/UserPage";
+import PrivateRoute from "./Components/PrivateRoute";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <RootAppPage />,
+      element: (
+        <PrivateRoute>
+          <RootAppPage />
+        </PrivateRoute>
+      ),
       children: [
         { index: true, element: <Navigate to="/todos" replace /> },
         { path: "todos", element: <TodoListPage /> },
         { path: "profile", element: <ProfilePage /> },
         { path: "admin", element: <AdminPage /> },
-        { path: "admin/:userId", element: <UserAdminProfilePage /> },
+        { path: "admin/:userId", element: <UserPage /> },
       ],
     },
     {

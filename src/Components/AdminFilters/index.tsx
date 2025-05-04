@@ -1,20 +1,18 @@
-import "./AdminFilters.css"
+import "./AdminFilters.css";
 
 import { Input, Form, Select, Button } from "antd";
-import type { GetProps } from "antd";
 
-const { Search } = Input;
 const { Option } = Select;
-type SearchProps = GetProps<typeof Input.Search>;
+import debounce from "lodash.debounce";
 
 const AdminFilters: React.FC<{
-  onSearch: SearchProps["onSearch"];
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
   onFinishFilter: (values: any) => void;
-}> = ({ onSearch, onFinishFilter }) => {
+}> = ({ onChange, onFinishFilter }) => {
   return (
     <div className="admin-filters">
       <div className="search-users">
-        <Search placeholder="Поиск" onSearch={onSearch} enterButton />
+        <Input placeholder="Поиск" onChange={debounce(onChange, 300)} />
       </div>
 
       <Form

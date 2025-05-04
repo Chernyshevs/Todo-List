@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../types/adminTypes";
+import { Roles, User } from "../types/adminTypes";
+import { RootState } from ".";
 
 const initialUserProfileState: { userData: User } = {
   userData: {
@@ -8,10 +9,13 @@ const initialUserProfileState: { userData: User } = {
     email: "",
     date: "",
     isBlocked: false,
-    roles: ["USER"],
+    roles: [],
     phoneNumber: "",
   },
 };
+
+export const hasRole = (role: Roles) => (state: RootState) =>
+  state.userProfile.userData.roles.includes(role);
 
 const userProfileSlice = createSlice({
   name: "userProfile",

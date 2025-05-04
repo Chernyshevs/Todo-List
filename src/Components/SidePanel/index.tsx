@@ -1,7 +1,5 @@
 import "./SidePanel.css";
 
-import { useEffect } from "react";
-
 import { Link } from "react-router-dom";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
@@ -10,30 +8,12 @@ import {
   UserOutlined,
   LaptopOutlined,
 } from "@ant-design/icons";
-import { getUserData } from "../../api/auth";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { userProfileActions } from "../../store/user-profile-slice";
+import { useSelector } from "react-redux";
+import { hasRole } from "../../store/user-profile-slice";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const SidePanel: React.FC = () => {
-  const dispatch = useDispatch();
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const userData = await getUserData();
-      dispatch(userProfileActions.setUserData(userData));
-      if (
-        userData.roles.includes("ADMIN") ||
-        userData.roles.includes("MODERATOR")
-      ) {
-        setIsAdmin(true);
-      }
-    };
-    fetchUserData();
-  }, []);
   const items: MenuItem[] = [
     {
       key: "1",
@@ -46,7 +26,10 @@ const SidePanel: React.FC = () => {
       label: <Link to="/profile">Профиль</Link>,
     },
   ];
-  if (isAdmin) {
+  const isAdmin = useSelector(hasRole("ADMIN"));
+  const isModerator = useSelector(hasRole("MODERATOR"));
+
+  if (isAdmin || isModerator) {
     items.push({
       key: "3",
       icon: <LaptopOutlined />,

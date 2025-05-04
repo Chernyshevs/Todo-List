@@ -1,9 +1,13 @@
 import "./AdminActions.css";
 
-import { Space, Popconfirm, Button, Popover } from "antd";
+import { useState } from "react";
+
+import { Space, Popconfirm, Button, Popover, Select } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { User, UserRolesRequest } from "../../types/adminTypes";
+
+import type { SelectProps } from "antd";
 
 const AdminActions: React.FC<{
   record: User;
@@ -12,6 +16,19 @@ const AdminActions: React.FC<{
   onUnBlockUser: (id: string) => Promise<void>;
   onUpdateRoles: (id: string, newRoles: UserRolesRequest) => Promise<void>;
 }> = ({ record, onDelete, onBlockUser, onUnBlockUser, onUpdateRoles }) => {
+  const [newRolesRequest, setNewRolesRequest] = useState<UserRolesRequest>({
+    roles: ["USER"],
+  });
+
+  const handleChangeRole = (newRoles: UserRolesRequest) => {
+    setNewRolesRequest(newRoles);
+  };
+
+  const rolesOptions: SelectProps["options"] = [
+    { label: "Администратор", value: "ADMIN" },
+    { label: "Модератор", value: "MODERATOR" },
+  ];
+
   return (
     <div className="admin-actions">
       <ul>
@@ -40,79 +57,31 @@ const AdminActions: React.FC<{
             title="Управление ролями"
             content={
               <div className="admin-control-roles">
-                <ul>
-                  <li>
-                    {!record.roles.includes("ADMIN") ? (
-                      <Popconfirm
-                        title="Назначить администратором"
-                        description={`Вы уверены что хотите назначить администратором пользователя ${record.username}?`}
-                        icon={<QuestionCircleOutlined />}
-                        cancelText="Нет"
-                        okText="Да"
-                        onConfirm={() =>
-                          onUpdateRoles(`${record.id}`, {
-                            roles: [...record.roles, "ADMIN"],
-                          })
-                        }
-                      >
-                        <Button>Назначить администратором</Button>
-                      </Popconfirm>
-                    ) : (
-                      <Popconfirm
-                        title="Отобрать администратора"
-                        description={`Вы уверены что хотите отобрать администратора у пользователя ${record.username}?`}
-                        icon={<QuestionCircleOutlined />}
-                        cancelText="Нет"
-                        okText="Да"
-                        onConfirm={() =>
-                          onUpdateRoles(`${record.id}`, {
-                            roles: record.roles.filter(
-                              (role) => role != "ADMIN"
-                            ),
-                          })
-                        }
-                      >
-                        <Button>Отобрать администратора</Button>
-                      </Popconfirm>
-                    )}
-                  </li>
-                  <li>
-                    {" "}
-                    {!record.roles.includes("MODERATOR") ? (
-                      <Popconfirm
-                        title="Назначить модератором"
-                        description={`Вы уверены что хотите назначить модератором пользователя ${record.username}?`}
-                        icon={<QuestionCircleOutlined />}
-                        cancelText="Нет"
-                        okText="Да"
-                        onConfirm={() =>
-                          onUpdateRoles(`${record.id}`, {
-                            roles: [...record.roles, "MODERATOR"],
-                          })
-                        }
-                      >
-                        <Button>Назначить модератором</Button>
-                      </Popconfirm>
-                    ) : (
-                      <Popconfirm
-                        title="Отобрать модератора"
-                        description={`Вы уверены что хотите отобрать модератора у пользователя ${record.username}?`}
-                        icon={<QuestionCircleOutlined />}
-                        cancelText="Нет"
-                        okText="Да"
-                        onConfirm={() =>
-                          onUpdateRoles(`${record.id}`, {
-                            roles: record.roles.filter(
-                              (role) => role != "MODERATOR"
-                            ),
-                          })
-                        }
-                      >
-                        <Button>Отобрать модератора</Button>
-                      </Popconfirm>
-                    )}
-                  </li>
-                </ul>
+                <Select
+                  mode="multiple"
+                  allowClear
+                  style={{ width: "100%" }}
+                  placeholder="Выберите роль"
+                  defaultValue={record.roles.filter((role) => role != "USER")}
+                  onChange={(value) =>
+                    handleChangeRole({
+                      roles: ["USER", ...value],
+                    })
+                  }
+                  options={rolesOptions}
+                />
+                <Popconfirm
+                  title="Обновить роль"
+                  description={`Вы уверены что хотите обновить роли у ${record.username}?`}
+                  icon={<QuestionCircleOutlined />}
+                  cancelText="Нет"
+                  okText="Да"
+                  onConfirm={() =>
+                    onUpdateRoles(`${record.id}`, newRolesRequest)
+                  }
+                >
+                  <Button>Подтвердить</Button>
+                </Popconfirm>
               </div>
             }
             trigger="click"
