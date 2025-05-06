@@ -20,6 +20,7 @@ import type {
 } from "../../types/adminTypes";
 import type { GetProp, TableProps } from "antd";
 import AdminFilters from "../../Components/AdminFilters";
+import useDebounce from "../../hooks/useDebounce";
 
 type TablePaginationConfig = Exclude<
   GetProp<TableProps, "pagination">,
@@ -43,46 +44,59 @@ const AdminPage: React.FC = () => {
       showSizeChanger: false,
     });
   const [api, contextHolder] = notification.useNotification();
-  useEffect(() => {
-    const fetchUsersData = async () => {
-      try {
-        setIsLoading(true);
 
-        const users = await getAllUsers(sorterParams);
-        setUsersData(users.data);
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedSearch = useDebounce(searchValue, 500);
 
-        const totalAmount = users.meta.totalAmount;
+  const fetchUsersData = async () => {
+    try {
+      setIsLoading(true);
+
+      const users = await getAllUsers(sorterParams);
+      setUsersData(users.data);
+
+      const totalAmount = users.meta.totalAmount;
+      setPaginationParams((prevPagination) => {
+        return {
+          ...prevPagination,
+          total: totalAmount,
+        };
+      });
+
+      if (totalAmount < PAGINATION_USER_LIMIT) {
         setPaginationParams((prevPagination) => {
           return {
             ...prevPagination,
-            total: totalAmount,
+            position: ["none", "none"],
           };
         });
-
-        if (totalAmount < PAGINATION_USER_LIMIT) {
-          setPaginationParams((prevPagination) => {
-            return {
-              ...prevPagination,
-              position: ["none", "none"],
-            };
-          });
-        } else if (paginationParams) {
-          setPaginationParams((prevPagination) => {
-            return {
-              ...prevPagination,
-              position: undefined,
-            };
-          });
-        }
-      } catch (error) {
-        alert("Ошибка при получении пользователей");
-      } finally {
-        setIsLoading(false);
+      } else if (paginationParams) {
+        setPaginationParams((prevPagination) => {
+          return {
+            ...prevPagination,
+            position: undefined,
+          };
+        });
       }
-    };
+    } catch (error) {
+      alert("Ошибка при получении пользователей");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUsersData();
   }, [paginationParams?.current, paginationParams?.pageSize, sorterParams]);
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      setSorterParams((prevSorterParams) => ({
+        ...prevSorterParams,
+        search: searchValue,
+      }));
+    }
+  }, [debouncedSearch]);
 
   const openErrorNotification = (message: string) => {
     api["error"]({
@@ -103,15 +117,12 @@ const AdminPage: React.FC = () => {
   };
 
   const onSearch: React.ChangeEventHandler<HTMLInputElement> = (event) =>
-    setSorterParams((prevSorterParams) => ({
-      ...prevSorterParams,
-      search: event.target.value,
-    }));
+    setSearchValue(event.target.value);
 
   const handleDeleteUser = async (id: string) => {
     try {
       await deleteUser(id);
-      setSorterParams((prevParams) => ({ ...prevParams }));
+      fetchUsersData();
     } catch {
       openErrorNotification("Не удалось удалить пользователя.");
     }
@@ -120,7 +131,7 @@ const AdminPage: React.FC = () => {
   const handleBlockUser = async (id: string) => {
     try {
       await blockUser(id);
-      setSorterParams((prevParams) => ({ ...prevParams }));
+      fetchUsersData();
     } catch (error) {
       openErrorNotification("Не удалось заблокировать пользователя");
     }
@@ -129,7 +140,7 @@ const AdminPage: React.FC = () => {
   const handleUnBlockUser = async (id: string) => {
     try {
       await unBlockUser(id);
-      setSorterParams((prevParams) => ({ ...prevParams }));
+      fetchUsersData();
     } catch (error) {
       openErrorNotification("Не удалось разблокировать пользователя");
     }
@@ -138,7 +149,7 @@ const AdminPage: React.FC = () => {
   const handleUpdateRole = async (id: string, newRoles: UserRolesRequest) => {
     try {
       await updateRolesUser(id, newRoles);
-      setSorterParams((prevParams) => ({ ...prevParams }));
+      fetchUsersData();
     } catch (error) {
       openErrorNotification("Не удалось обновить роли пользователя");
     }

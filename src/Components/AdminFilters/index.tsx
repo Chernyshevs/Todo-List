@@ -3,7 +3,6 @@ import "./AdminFilters.css";
 import { Input, Form, Select, Button } from "antd";
 
 const { Option } = Select;
-import debounce from "lodash.debounce";
 
 const AdminFilters: React.FC<{
   onChange: React.ChangeEventHandler<HTMLInputElement>;
@@ -12,7 +11,7 @@ const AdminFilters: React.FC<{
   return (
     <div className="admin-filters">
       <div className="search-users">
-        <Input placeholder="Поиск" onChange={debounce(onChange, 300)} />
+        <Input placeholder="Поиск" onChange={onChange} />
       </div>
 
       <Form
