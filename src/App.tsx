@@ -11,27 +11,25 @@ import AuthRootPage from "./pages/AuthRootPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import LoginPage from "./pages/LoginPage";
 
-import { useDispatch } from "react-redux";
-import { checkAuth } from "./store/auth-actions";
-
-import { useEffect } from "react";
-
-import type { AppDispatch } from "./store";
+import AdminPage from "./pages/AdminPage";
+import UserPage from "./pages/UserPage";
+import PrivateRoute from "./Components/PrivateRoute";
 
 function App() {
-  const dispatch: AppDispatch = useDispatch();
-  useEffect(() => {
-    dispatch(checkAuth());
-  }, []);
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <RootAppPage />,
+      element: (
+        <PrivateRoute>
+          <RootAppPage />
+        </PrivateRoute>
+      ),
       children: [
         { index: true, element: <Navigate to="/todos" replace /> },
         { path: "todos", element: <TodoListPage /> },
         { path: "profile", element: <ProfilePage /> },
+        { path: "admin", element: <AdminPage /> },
+        { path: "admin/:userId", element: <UserPage /> },
       ],
     },
     {

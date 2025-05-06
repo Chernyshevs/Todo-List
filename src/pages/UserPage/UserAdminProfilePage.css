@@ -1,0 +1,42 @@
+.admin-user-profile {
+  display: flex;
+  margin: 1rem;
+  flex-direction: column;
+  place-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.admin-user-profile h1 {
+  color: white;
+}
+
+.admin-user-data {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.4rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  width: 50%;
+}
+.admin-user-data-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.admin-user-data-form input{
+  width: 250px;
+}
+
+.admin-user-actions {
+  display: flex;
+  justify-content: end;
+}
+
+.admin-user-actions ul {
+  display: flex;
+  gap: 1rem;
+}
