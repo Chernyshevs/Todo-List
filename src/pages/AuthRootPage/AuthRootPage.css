@@ -1,0 +1,11 @@
+.auth-wrapper {
+  display: flex;
+  height: 100vh;
+  background-color: white;
+}
+
+.auth-image {
+  display: block;
+  max-height: 100vh;
+  pointer-events: none;
+}

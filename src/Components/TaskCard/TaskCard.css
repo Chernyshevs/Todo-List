@@ -1,0 +1,27 @@
+.task-card {
+  display: flex;
+  gap: 1rem;
+  background-color: white;
+  border-radius: 7px;
+  padding: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+.task-card.completed {
+  color: rgb(135, 134, 132);
+  text-decoration: line-through;
+}
+
+.left-side {
+  word-break: break-all;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.right-side {
+  display: flex;
+  gap: 0.5rem;
+}

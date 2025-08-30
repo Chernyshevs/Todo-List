@@ -1,0 +1,9 @@
+.side-nav-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 215px;
+  background-color: #d2e5f5;
+  z-index: 100;
+}
